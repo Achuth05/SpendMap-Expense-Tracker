@@ -1,0 +1,53 @@
+import React from 'react';
+import {useState} from 'react';
+import {Link} from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
+const Navbar=()=>{
+    const navigate=useNavigate();
+    const[dropDown, setDropDown]=useState(false);
+    const[hamburger, setHamburger]=useState(false);
+    const handleLogout=()=>{
+        localStorage.removeItem('token');
+        navigate('/');
+    }
+    return (
+    <nav className="bg-gray-300 shadow-md px-4 py-3">
+      <div className="max-w-7xl mx-auto flex items-center justify-between">
+        <div className="flex space-x-4">
+            {/* Hamburger for mobile */}
+            <div className="md:hidden">
+                <button onClick={() => setHamburger(!hamburger)}>☰</button>
+            </div>
+
+            <Link to='/home' className="text-gray-800 font-medium hover:text-blue-600 hidden md:block">Home</Link>
+            <Link to="/add" className="text-gray-800 font-medium hover:text-blue-600 hidden md:block">Add Expense</Link>
+            <Link to="/report" className="text-gray-800 font-medium hover:text-blue-600 hidden md:block">Report</Link>
+        </div>
+
+        
+        {/* Right side - Profile icon */}
+        <div className="relative">
+          <button onClick={() => setDropDown(!dropDown)} className="text-xl">
+            👤
+          </button>
+          {dropDown && (
+            <div className="absolute right-0 mt-2 w-40 bg-white rounded shadow-lg z-50">
+              <Link to="/profile" className="block px-4 py-2 hover:bg-gray-100 text-sm">Profile</Link>
+              <button onClick={handleLogout} className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm text-red-600">Logout</button>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Mobile Menu - only when open */}
+      {hamburger && (
+        <div className="mt-2 md:hidden space-y-2">
+          <Link to="/add" className="block text-gray-800 px-2 py-1">Add Expense</Link>
+          <Link to="/report" className="block text-gray-800 px-2 py-1">Report</Link>
+        </div>
+      )}
+    </nav>
+  );
+    
+};
+export default Navbar;
