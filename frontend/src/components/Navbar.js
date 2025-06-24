@@ -12,8 +12,8 @@ const Navbar=()=>{
     }
     return (
     <nav className="bg-gray-300 shadow-md px-4 py-3">
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <div className="flex space-x-4">
+      <div className="max-w-7xl flex items-center justify-between">
+        <div className=" items-center flex space-x-4">
             {/* Hamburger for mobile */}
             <div className="md:hidden">
                 <button onClick={() => setHamburger(!hamburger)}>☰</button>
@@ -26,7 +26,7 @@ const Navbar=()=>{
 
         
         {/* Right side - Profile icon */}
-        <div className="relative">
+        <div className="flex-shrink-0 relative">
           <button onClick={() => setDropDown(!dropDown)} className="text-xl">
             👤
           </button>
@@ -42,8 +42,9 @@ const Navbar=()=>{
       {/* Mobile Menu - only when open */}
       {hamburger && (
         <div className="mt-2 md:hidden space-y-2">
-          <Link to="/add" className="block text-gray-800 px-2 py-1">Add Expense</Link>
-          <Link to="/report" className="block text-gray-800 px-2 py-1">Report</Link>
+          <Link to="/home" className='block text-gray-800 px-2 py-1 hover:text-blue-600'>Home</Link>
+          <Link to="/add" className="block text-gray-800 px-2 py-1 hover:text-blue-600">Add Expense</Link>
+          <Link to="/report" className="block text-gray-800 px-2 py-1 hover:text-blue-600">Report</Link>
         </div>
       )}
     </nav>

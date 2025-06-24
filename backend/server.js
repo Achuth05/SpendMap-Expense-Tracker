@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
 });
 
 // FIX: Explicitly bind to localhost
-app.listen(PORT, 'localhost', (err) => {
+app.listen(PORT, '0.0.0.0', (err) => {
     if (err) {
         console.error('Failed to start server:', err);
         return;
