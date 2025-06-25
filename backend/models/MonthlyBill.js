@@ -17,6 +17,7 @@ const monthlySchema = new mongoose.Schema({
   water: { type: Number, default: 0 },
   rent: { type: Number, default: 0 },
   others: { type: Number, default: 0 },
+  notes:{type:String},
   total: { type: Number },
   created: { type: Date, default: Date.now }
 });
