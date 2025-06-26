@@ -1,5 +1,5 @@
 import React from 'react';
-/*import Protected from './components/Protected';*/
+import Protected from './components/Protected';
 import { Routes, Route} from 'react-router-dom';
 import HomePage from './pages/Home';
 import RegisterPage from './pages/Register';
@@ -17,10 +17,10 @@ function App() {
           <Routes>
             <Route path="/register" element={<RegisterPage/>}/>
             <Route path="/" element={<LoginPage/>}/>
-            <Route path="/home" element={<HomePage/>}/>
-            <Route path="/add" element={<AddExpense/>}/>
-            <Route path="/report" element={<ReportPage/>}/>
-            <Route path="/profile" element={<Profile/>}/>
+            <Route path="/home" element={<Protected><HomePage/></Protected>}/>
+            <Route path="/add" element={<Protected><AddExpense/></Protected>}/>
+            <Route path="/report" element={<Protected><ReportPage/></Protected>}/>
+            <Route path="/profile" element={<Protected><Profile/></Protected>}/>
           </Routes>
       </>
   );

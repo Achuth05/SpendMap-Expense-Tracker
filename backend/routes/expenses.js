@@ -8,10 +8,12 @@ const nonRegular=require('../models/NonRegular');
 router.post('/daily', auth, async(req,res)=>{
     try{
         const dailyData=req.body;
-        if (!dailyData.userId || !dailyData.date) {
-            return res.status(400).json({ msg: 'userId and date are required' });
+        dailyData.userId=req.user.id;
+        if (!dailyData.date) {
+            return res.status(400).json({ msg: 'Date is required' });
         }
-        await daily.create(dailyData);
+        const saved=await daily.create(dailyData);
+        console.log("Received", saved);
         res.status(200).json({msg:'Added'});
     }
     catch(error){
@@ -23,10 +25,12 @@ router.post('/daily', auth, async(req,res)=>{
 router.post('/monthly', auth, async(req,res)=>{
     try{
         const monthlyData=req.body;
-        if (!monthlyData.userId || !monthlyData.date) {
-            return res.status(400).json({ msg: 'userId and date are required' });
+        monthlyData.userId=req.user.id;
+        if (!monthlyData.month) {
+            return res.status(400).json({ msg: 'Month required' });
         }
-        await monthly.create(monthlyData);
+        const saved=await monthly.create(monthlyData);
+        console.log("Received", saved);
         res.status(200).json({msg:'Added'});
     }
     catch(error){
@@ -37,10 +41,12 @@ router.post('/monthly', auth, async(req,res)=>{
 router.post('/occasional', auth, async(req,res)=>{
     try{
         const nonRegularData=req.body;
-        if (!nonRegularData.userId || !nonRegularData.date) {
-            return res.status(400).json({ msg: 'userId and date are required' });
+        nonRegularData.userId=req.user.id;
+        if (!nonRegularData.date) {
+            return res.status(400).json({ msg: 'Date is required' });
         }
-        await nonRegular.create(nonRegularData);
+        const saved=await nonRegular.create(nonRegularData);
+        console.log("Received", saved);
         res.status(200).json({msg:'Added'});
     }
     catch(error){

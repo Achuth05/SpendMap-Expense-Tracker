@@ -2,7 +2,8 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import Navbar from "../components/Navbar";
 const AddExpense = () =>{
-    const[currentTab, setCurrentTab]=useState("daily");
+    const[currentTab, setCurrentTab]=useState('daily');
+    const[submitMsg, setSubmitMsg]=useState('');
     //all
     const[others, setOthers]=useState(0);
     const[notes, setNotes]=useState('');
@@ -18,6 +19,41 @@ const AddExpense = () =>{
         setTotal(dtotal);
     }, [food, travel, entmt, shop, others]);
 
+    const handleDailySubmit= async(e)=>{
+        e.preventDefault();
+        const token=localStorage.getItem('token');
+        const dailyExpData={
+            date, food: Number(food), travel: Number(travel), entertainment: Number(entmt), shopping: Number(shop),
+            others: Number(others), notes
+        };
+        try{
+            const res= await fetch('http://localhost:3001/api/expenses/daily',
+                {
+                    method:'POST',
+                    headers:{'Content-Type':'application/json',
+                                Authorization:`Bearer ${token}`,
+                    },
+                    body:JSON.stringify(dailyExpData),
+                }
+            );
+            const data= await res.json();
+            console.log("Submitted", data);
+            setSubmitMsg("Succesfully added your expenses!");
+        }
+        catch(err){
+            console.error("Error submitting data", err);
+            setSubmitMsg("Oops!Error occured. Please try again");
+        }
+        setDate('');
+        setFood(0);
+        setTravel(0);
+        setEntmt(0);
+        setShop(0);
+        setOthers(0);
+        setNotes('');
+        setTotal(0);
+    }
+
     //monthly
     const[month, setMonth]=useState('');
     const[year, setYear]=useState(0);
@@ -29,6 +65,41 @@ const AddExpense = () =>{
         const mtotal= Number(ecity)+Number(water)+Number(rent)+Number(others);
         setSum(mtotal);
     }, [ecity, water, rent, others]);
+    const handleMonthlySubmit= async(e)=>{
+        e.preventDefault();
+        const token=localStorage.getItem('token');
+        const monthlyExpData={
+            month, year, electricity: Number(ecity), water: Number(water), rent: Number(rent),
+            others: Number(others), notes
+        };
+        try{
+            const res= await fetch('http://localhost:3001/api/expenses/monthly',
+                {
+                    method:'POST',
+                    headers:{'Content-Type':'application/json',
+                                Authorization:`Bearer ${token}`,
+                    },
+                    body:JSON.stringify(monthlyExpData),
+                }
+            );
+            const data= await res.json();
+            console.log("Submitted", data);
+            setSubmitMsg("Succesfully added your expenses!");
+        }
+        catch(err){
+            console.error("Error submitting data", err);
+            setSubmitMsg("Oops!Error occured. Please try again");
+        }
+        setMonth('');
+        setYear(0);
+        setEcity(0);
+        setWater(0);
+        setRent(0);
+        setOthers(0);
+        setNotes('');
+        setSum(0);
+    }
+
 
     //occasional
     const[insurance, setInsurance]=useState(0);
@@ -39,6 +110,38 @@ const AddExpense = () =>{
         const ototal= Number(insurance)+Number(schoolFee)+Number(repair);
         setOsum(ototal);
     }, [insurance, schoolFee, repair]);
+    const handleOccasionalSubmit= async(e)=>{
+        e.preventDefault();
+        const token=localStorage.getItem('token');
+        const occasionalData={
+            date, insurance: Number(insurance), schoolFee: Number(schoolFee), repair: Number(repair), notes
+        };
+        try{
+            const res= await fetch('http://localhost:3001/api/expenses/occasional',
+                {
+                    method:'POST',
+                    headers:{'Content-Type':'application/json',
+                                Authorization:`Bearer ${token}`,
+                    },
+                    body:JSON.stringify(occasionalData),
+                }
+            );
+            const data= await res.json();
+            console.log("Submitted", data);
+            setSubmitMsg("Succesfully added your expenses!");
+        }
+        catch(err){
+            console.error("Error submitting data", err);
+            setSubmitMsg("Oops!Error occured. Please try again");
+        }
+        setDate('');
+        setInsurance(0);
+        setSchoolFee(0);
+        setRepair(0);
+        setNotes('');
+        setOsum(0);
+    }
+
     
     return(
         <>
@@ -46,15 +149,21 @@ const AddExpense = () =>{
                 <Navbar/>
                 <h1 className="text-gray-800 text-3xl sm:4xl md:text-5xl  font-bold mb-6 px-4 py-4 ">Add Expense</h1>
                 <div className="flex justify-center space-x-4 mb-6">
-                    <button onClick={()=>setCurrentTab('daily')} className={`px-4 py-4 shadow-md rounded ${currentTab==="daily"?"bg-blue-500 text-white hover:bg-blue-600 font-bold":"bg-gray-600 hover:bg-gray-500 text-white"}`}>Daily</button>
-                    <button onClick={()=>setCurrentTab('monthly')} className={`px-4 py-4 shadow-md rounded ${currentTab==="monthly"?"bg-blue-500 text-white hover:bg-blue-600 font-bold":"bg-gray-600 hover:bg-gray-500 text-white"}`}>Monthly</button>
-                    <button onClick={()=>setCurrentTab('occasional')} className={`px-4 py-4 shadow-md rounded ${currentTab==="occasional"?"bg-blue-500 hover:bg-blue-600 text-white font-bold":"bg-gray-600 hover:bg-gray-500 text-white"}`}>Occasional</button>
+                    <button onClick={()=>{setCurrentTab('daily');
+                                            setSubmitMsg('');} }
+                        className={`px-4 py-4 shadow-md rounded ${currentTab==="daily"?"bg-blue-500 text-white hover:bg-blue-600 font-bold":"bg-gray-600 hover:bg-gray-500 text-white"}`}>Daily</button>
+                    <button onClick={()=>{setCurrentTab('monthly');
+                                            setSubmitMsg('');}}
+                             className={`px-4 py-4 shadow-md rounded ${currentTab==="monthly"?"bg-blue-500 text-white hover:bg-blue-600 font-bold":"bg-gray-600 hover:bg-gray-500 text-white"}`}>Monthly</button>
+                    <button onClick={()=>{setCurrentTab('occasional');
+                                            setSubmitMsg('');}}
+                     className={`px-4 py-4 shadow-md rounded ${currentTab==="occasional"?"bg-blue-500 hover:bg-blue-600 text-white font-bold":"bg-gray-600 hover:bg-gray-500 text-white"}`}>Occasional</button>
                 </div>
                 <div className="flex justify-center items-start ">
                     {currentTab==="daily" &&
                             <div className="bg-gray-200 flex flex-col justify-center items-center rounded w-full mb-6 max-w-md mx-4 px-5 sm:mx-auto">
                                 <h2 className="text-3xl mb-4 mt-4 font-bold">Daily expense form</h2>
-                                <form className="w-full py-6">
+                                <form onSubmit={handleDailySubmit} className="w-full py-6">
                                     <div className="mb-4">
                                         <label className="text-sm text-gray-800 mb-1 font-bold block">Date</label>
                                         <input 
@@ -140,12 +249,13 @@ const AddExpense = () =>{
                                         className="w-full bg-gray-600 text-white font-bold hover:bg-blue-500 p-1 rounded shadow-md"
                                     >Add</button>
                                 </form>
+                                {submitMsg && (<p className="text-green-700 text-sm font-bold mt-3 mb-3">{submitMsg}</p>)}
                             </div>
                         }
                         {currentTab==="monthly" &&
                             <div className="bg-gray-200 flex flex-col justify-center items-center rounded w-full mb-6 max-w-md mx-4 px-5 sm:mx-auto">
                                 <h2 className="text-3xl mb-4 mt-4 font-bold">Monthly expense form</h2>
-                                <form className="w-full py-6">
+                                <form onSubmit={handleMonthlySubmit} className="w-full py-6">
                                     <div className="mb-4">
                                         <label className="text-sm text-gray-800 mb-1 font-bold block">Month</label>
                                         <select
@@ -234,12 +344,13 @@ const AddExpense = () =>{
                                         className="w-full bg-gray-600 text-white font-bold hover:bg-blue-500 p-1 rounded shadow-md"
                                     >Add</button>
                                 </form>
+                                {submitMsg && (<p className="text-green-700 text-sm font-bold mt-3 mb-3">{submitMsg}</p>)}
                             </div>
                         }
                         {currentTab==="occasional" &&
                             <div className="bg-gray-200 flex flex-col justify-center items-center rounded w-full mb-6 max-w-md mx-4 px-5 sm:mx-auto">
                                 <h2 className="text-3xl mb-4 mt-4 font-bold">Occasional expense form</h2>
-                                <form className="w-full py-6">
+                                <form onSubmit={handleOccasionalSubmit} className="w-full py-6">
                                     <div className="mb-4">
                                         <label className="text-sm text-gray-800 mb-1 font-bold block">Date</label>
                                         <input
@@ -304,6 +415,7 @@ const AddExpense = () =>{
                                         className="w-full bg-gray-600 text-white font-bold hover:bg-blue-500 p-1 rounded shadow-md"
                                     >Add</button>
                                 </form>
+                                {submitMsg && (<p className="text-green-700 text-sm font-bold mt-3 mb-3">{submitMsg}</p>)}
                             </div>
                         }
                 </div>  
