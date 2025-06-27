@@ -7,17 +7,18 @@ const monthly=require('../models/MonthlyBill');
 router.get('/weekly/:id', auth, async(req,res)=>{
     try{
         const id=req.params.id;
-        const date=new Date();
-        date.setHours(0,0,0,0);
-        const endDate=new Date(date);
-        endDate.setDate(endDate.getDate()-1);
-        const startDate=new Date(date);
-        startDate.setDate(startDate.getDate()-7);
+        const {startDate, endDate}=req.query;
+        if(!startDate||!endDate){
+            return res.status(400).json({msg:"Start and end dates are required"});
+        }
+        const start=new Date(startDate);
+        const end= new Date(endDate);
+        end.setHours(23, 59, 59, 999);
         const weeklyExpense= await daily.aggregate([
             {
                 $match:{
                 userId: mongoose.Types.ObjectId(id),
-                date: {$gte:startDate, $lte:endDate}
+                date: {$gte:start, $lte:end}
                 }
             },
             {
@@ -37,7 +38,7 @@ router.get('/weekly/:id', auth, async(req,res)=>{
 
     }
     catch(error){
-        res.status(400).send('Report failed');    
+        res.status(500).send('Server error');    
     }
 });
 router.get('/monthly/:id/:month/:year', auth, async(req,res)=>{
