@@ -20,13 +20,15 @@ const ReportPage=()=>{
         const token=localStorage.getItem('token');
         const decoded=jwtDecode(token);
         const userId=decoded.user.id;
+        console.log("fetching for", startDate, endDate);
         try{
-            const res = await fetch(`http://localhost:3001/api/reports/weekly/${userId}?start=${startDate}&end=${endDate}`,
+            const res = await fetch(`http://localhost:3001/api/reports/weekly/${userId}?startDate=${startDate}&endDate=${endDate}`,
                 {
-                    headers:{'Content-Type':'application/json', Authorization:`Bearer:${token}`},
+                    headers:{'Content-Type':'application/json', Authorization:`Bearer ${token}`},
                 }
             );
             const data=await res.json();
+            console.log("Response:", data);
             setWeeklyData(data.data);
             setShowForm(false);
         }
@@ -45,7 +47,8 @@ const ReportPage=()=>{
                  }
                         className={`px-4 py-4 shadow-md rounded ${currentTab==="weekly"?"bg-blue-500 text-white hover:bg-blue-600 font-bold":"bg-gray-600 hover:bg-gray-500 text-white"}`}>Weekly</button>
                 <button onClick={()=>{setCurrentTab('monthlyy');
-                                        setShowForm(true);}}
+                                        setShowForm(true);
+                                        setWeeklyData(null);}}
                         className={`px-4 py-4 shadow-md rounded ${currentTab==="monthly"?"bg-blue-500 text-white hover:bg-blue-600 font-bold":"bg-gray-600 hover:bg-gray-500 text-white"}`}>Monthly</button>
                 <button onClick={()=>{setCurrentTab('occasional');
                                         setShowForm(true);}}
@@ -54,10 +57,11 @@ const ReportPage=()=>{
                                         setShowForm(true);}}
                         className={`px-4 py-4 shadow-md rounded ${currentTab==="compare"?"bg-blue-500 hover:bg-blue-600 text-white font-bold":"bg-gray-600 hover:bg-gray-500 text-white"}`}>Compare</button>
             </div>
-            <div className='flex justify-center items-start'>
+            
                 {currentTab==="weekly" &&
+                        (showForm &&(
                             <div className="bg-gray-200 flex flex-col justify-center items-center rounded w-full mb-6 max-w-md mx-4 px-5 sm:mx-auto">
-                                {showForm ?(<form onSubmit={handleWeeklyReport} className="w-full py-6">
+                                <form onSubmit={handleWeeklyReport} className="w-full py-6">
                                     <h2 className="text-2xl mb-4 mt-4 font-bold">Enter dates</h2>
                                     <div className="mb-4">
                                         <label className="text-sm text-gray-800 mb-1 font-bold block">Start date</label>
@@ -83,20 +87,46 @@ const ReportPage=()=>{
                                         type="submit"
                                         className="w-full bg-gray-600 text-white font-bold hover:bg-blue-500 p-1 rounded shadow-md"
                                     >Fetch report</button>
-                                </form>)
-                                :weeklyData?(
-                                    <div className='bg-gray-200 rounded p-4 shadow-md'>
-                                        <h2 className='text-2xl font-bold mb-4 text-gray-800'>Weekly report</h2>
-                                        <p>Food:₹{weeklyData.totalFood}</p>
-                                        <p>Travel:₹{weeklyData.totalTravel}</p>
-                                        <p>Entertainment:₹{weeklyData.totalEntertainment}</p>
-                                        <p>Shopping:₹{weeklyData.totalShopping}</p>
-                                        <p>Others:₹{weeklyData.totalOthers}</p>
-                                        <p className='mt-2'>Total:₹{weeklyData.totalAmount}</p>
+                                </form>
+                            </div>))}
+                            {currentTab==='weekly' && !showForm && weeklyData && Object.keys(weeklyData).length>0 &&(
+                                <div className='flex justify-center w-screen items-center'>
+                                    <div className='flex items-center justify-center w-full max-w-md mt-4'>
+                                    <div className='bg-gray-200 flex flex-col justify-center rounded-lg p-6 space-y-2  w-full border-gray-400 max-wd-md mx-auto shadow-lg'>
+                                        <h2 className='text-2xl font-bold mb-4 border-b pb-2 text-gray-800'>Weekly report</h2>
+                                        <div className='flex justify-between'>
+                                            <span>Food:</span>
+                                            <span>₹{weeklyData.totalFood ||0}</span>
+                                        </div>
+                                        <div className='flex justify-between'>
+                                            <span>Travel:</span>
+                                            <span>₹{weeklyData.totalTravel ||0}</span>
+                                        </div>
+                                        <div className='flex justify-between'>
+                                            <span>Entertainment:</span>
+                                            <span>₹{weeklyData.totalEntertainment||0}</span>
+                                        </div>
+                                        <div className='flex justify-between'>
+                                            <span>Shopping:</span>
+                                            <span>₹{weeklyData.totalShopping ||0}</span>
+                                        </div>
+                                        <div className='flex justify-between'>
+                                            <span>Others:</span>
+                                            <span>₹{weeklyData.totalOthers ||0}</span>
+                                        </div>
+                                        <div className='mt-4 pt-2 border-t text-xl font-bold text-gray-800 flex justify-between'>
+                                            <span>Total expense:</span>
+                                            <span>₹{weeklyData.totalAmount || 0}</span>
+                                        </div>
                                     </div>
-                                ):(<p className='text-red-600'>No data for this range</p>)}
-                            </div>
-                    }
+                                </div>
+                                </div>
+                                
+                                    
+                                )}
+                                {currentTab==='weekly' && !showForm && (!weeklyData || Object.keys(weeklyData).length===0) &&
+                                    (<div className='bg-red-100 text-red-700 p-4 rounded shadow max-w-md mx-auto'>No data for this range</div>)}
+                        
                     {currentTab==="monthly" &&
                             <div className="bg-gray-200 flex flex-col justify-center items-center rounded w-full mb-6 max-w-md mx-4 px-5 sm:mx-auto">
                                 <h2 className="text-2xl mb-4 mt-4 font-bold">Enter month and year</h2>
@@ -213,7 +243,7 @@ const ReportPage=()=>{
                                 </form>
                             </div>
                     }
-            </div>
+            
         </div>
     );
 };

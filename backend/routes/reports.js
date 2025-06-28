@@ -14,10 +14,12 @@ router.get('/weekly/:id', auth, async(req,res)=>{
         const start=new Date(startDate);
         const end= new Date(endDate);
         end.setHours(23, 59, 59, 999);
+        console.log("Received startdate and enddate", startDate, endDate);
+        console.log("Converted to",start, end);
         const weeklyExpense= await daily.aggregate([
             {
                 $match:{
-                userId: mongoose.Types.ObjectId(id),
+                userId: new mongoose.Types.ObjectId(id),
                 date: {$gte:start, $lte:end}
                 }
             },
@@ -38,7 +40,8 @@ router.get('/weekly/:id', auth, async(req,res)=>{
 
     }
     catch(error){
-        res.status(500).send('Server error');    
+        console.error("Error in weekly route:", error);
+        res.status(500).json({msg:'Server error'});    
     }
 });
 router.get('/monthly/:id/:month/:year', auth, async(req,res)=>{
