@@ -5,17 +5,17 @@ const AddExpense = () =>{
     const[currentTab, setCurrentTab]=useState('daily');
     const[submitMsg, setSubmitMsg]=useState('');
     //all
-    const[others, setOthers]=useState(0);
+    const[others, setOthers]=useState('');
     const[notes, setNotes]=useState('');
     //daily
     const[date, setDate]=useState('');
-    const[food, setFood]=useState(0);
-    const[travel, setTravel]=useState(0);
-    const[entmt, setEntmt]=useState(0);
-    const[shop, setShop]=useState(0);
-    const[total, setTotal]=useState(0);
+    const[food, setFood]=useState('');
+    const[travel, setTravel]=useState('');
+    const[entmt, setEntmt]=useState('');
+    const[shop, setShop]=useState('');
+    const[total, setTotal]=useState('');
     useEffect(()=>{
-        const dtotal= Number(food)+Number(travel)+Number(entmt)+Number(shop)+Number(others);
+        const dtotal= (parseFloat(food)||0)+(parseFloat(travel)||0)+(parseFloat(entmt)||0)+(parseFloat(shop)||0)+(parseFloat(others)||0);
         setTotal(dtotal);
     }, [food, travel, entmt, shop, others]);
 
@@ -23,8 +23,8 @@ const AddExpense = () =>{
         e.preventDefault();
         const token=localStorage.getItem('token');
         const dailyExpData={
-            date, food: Number(food), travel: Number(travel), entertainment: Number(entmt), shopping: Number(shop),
-            others: Number(others), notes
+            date, food: Number(food)||0, travel: Number(travel)||0, entertainment: Number(entmt)||0, shopping: Number(shop)||0,
+            others: Number(others)||0, notes
         };
         try{
             const res= await fetch('http://localhost:3001/api/expenses/daily',
@@ -45,32 +45,32 @@ const AddExpense = () =>{
             setSubmitMsg("Oops!Error occured. Please try again");
         }
         setDate('');
-        setFood(0);
-        setTravel(0);
-        setEntmt(0);
-        setShop(0);
-        setOthers(0);
+        setFood('');
+        setTravel('');
+        setEntmt('');
+        setShop('');
+        setOthers('');
         setNotes('');
-        setTotal(0);
+        setTotal('');
     }
 
     //monthly
     const[month, setMonth]=useState('');
-    const[year, setYear]=useState(0);
-    const[ecity, setEcity]=useState(0);
-    const[water, setWater]=useState(0);
-    const[rent, setRent]=useState(0);
-    const[sum, setSum]=useState(0);
+    const[year, setYear]=useState('');
+    const[ecity, setEcity]=useState('');
+    const[water, setWater]=useState('');
+    const[rent, setRent]=useState('');
+    const[sum, setSum]=useState('');
     useEffect(()=>{
-        const mtotal= Number(ecity)+Number(water)+Number(rent)+Number(others);
+        const mtotal= (parseFloat(ecity)||0)+(parseFloat(water)||0)+(parseFloat(rent)||0)+(parseFloat(others)||0);
         setSum(mtotal);
     }, [ecity, water, rent, others]);
     const handleMonthlySubmit= async(e)=>{
         e.preventDefault();
         const token=localStorage.getItem('token');
         const monthlyExpData={
-            month, year, electricity: Number(ecity), water: Number(water), rent: Number(rent),
-            others: Number(others), notes
+            month, year, electricity: Number(ecity)||0, water: Number(water)||0, rent: Number(rent)||0,
+            others: Number(others)||0, notes
         };
         try{
             const res= await fetch('http://localhost:3001/api/expenses/monthly',
@@ -91,30 +91,30 @@ const AddExpense = () =>{
             setSubmitMsg("Oops!Error occured. Please try again");
         }
         setMonth('');
-        setYear(0);
-        setEcity(0);
-        setWater(0);
-        setRent(0);
-        setOthers(0);
+        setYear('');
+        setEcity('');
+        setWater('');
+        setRent('');
+        setOthers('');
         setNotes('');
-        setSum(0);
+        setSum('');
     }
 
 
     //occasional
-    const[insurance, setInsurance]=useState(0);
-    const[schoolFee, setSchoolFee]=useState(0);
-    const[repair, setRepair]=useState(0);
-    const[osum, setOsum]=useState(0);
+    const[insurance, setInsurance]=useState('');
+    const[schoolFee, setSchoolFee]=useState('');
+    const[repair, setRepair]=useState('');
+    const[osum, setOsum]=useState('');
     useEffect(()=>{
-        const ototal= Number(insurance)+Number(schoolFee)+Number(repair);
+        const ototal= (parseFloat(insurance)||0)+(parseFloat(schoolFee)||0)+(parseFloat(repair)||0);
         setOsum(ototal);
     }, [insurance, schoolFee, repair]);
     const handleOccasionalSubmit= async(e)=>{
         e.preventDefault();
         const token=localStorage.getItem('token');
         const occasionalData={
-            date, insurance: Number(insurance), schoolFee: Number(schoolFee), repair: Number(repair), notes
+            date, insurance: Number(insurance)||0, schoolFee: Number(schoolFee)||0, repair: Number(repair)||0, notes
         };
         try{
             const res= await fetch('http://localhost:3001/api/expenses/occasional',
@@ -135,11 +135,11 @@ const AddExpense = () =>{
             setSubmitMsg("Oops!Error occured. Please try again");
         }
         setDate('');
-        setInsurance(0);
-        setSchoolFee(0);
-        setRepair(0);
+        setInsurance('');
+        setSchoolFee('');
+        setRepair('');
         setNotes('');
-        setOsum(0);
+        setOsum('');
     }
 
     
@@ -177,7 +177,9 @@ const AddExpense = () =>{
                                     <div className="mb-4">
                                         <label className="text-sm text-gray-800 mb-1 font-bold block">Food</label>
                                         <input 
-                                            type="number"
+                                            type="text"
+                                            pattern="[0-9]*"
+                                            inputMode="numeric"
                                             value={food}
                                             onChange={(e)=>setFood(e.target.value)}
                                             placeholder="Enter food expense"
@@ -187,7 +189,9 @@ const AddExpense = () =>{
                                     <div className="mb-4">
                                         <label className="text-sm text-gray-800 mb-1 font-bold block">Travel</label>
                                         <input 
-                                            type="number"
+                                            type="text"
+                                            pattern="[0-9]*"
+                                            inputMode="numeric"
                                             value={travel}
                                             onChange={(e)=>setTravel(e.target.value)}
                                             placeholder="Enter travel expense"
@@ -197,7 +201,9 @@ const AddExpense = () =>{
                                     <div className="mb-4">
                                         <label className="text-sm text-gray-800 mb-1 font-bold block">Shopping</label>
                                         <input 
-                                            type="number"
+                                            type="text"
+                                            pattern="[0-9]*"
+                                            inputMode="numeric"
                                             value={shop}
                                             onChange={(e)=>setShop(e.target.value)}
                                             placeholder="Enter shopping expense"
@@ -207,7 +213,9 @@ const AddExpense = () =>{
                                     <div className="mb-4">
                                         <label className="text-sm text-gray-800 mb-1 font-bold block">Entertainment</label>
                                         <input 
-                                            type="number"
+                                            type="text"
+                                            pattern="[0-9]*"
+                                            inputMode="numeric"
                                             value={entmt}
                                             onChange={(e)=>setEntmt(e.target.value)}
                                             placeholder="Enter entertainment expense"
@@ -217,7 +225,9 @@ const AddExpense = () =>{
                                     <div className="mb-4">
                                         <label className="text-sm text-gray-800 mb-1 font-bold block">Others</label>
                                         <input 
-                                            type="number"
+                                            type="text"
+                                            pattern="[0-9]*"
+                                            inputMode="numeric"
                                             value={others}
                                             onChange={(e)=>setOthers(e.target.value)}
                                             placeholder="Enter other expense"
@@ -240,7 +250,6 @@ const AddExpense = () =>{
                                             type="Number"
                                             value={total}
                                             readOnly
-                                            placeholder="Enter date"
                                             className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none"
                                         />
                                     </div>
@@ -273,7 +282,9 @@ const AddExpense = () =>{
                                     <div className="mb-4">
                                         <label className="text-sm text-gray-800 mb-1 font-bold block">Year</label>
                                         <input 
-                                            type="number"
+                                            type="text"
+                                            pattern="[0-9]*"
+                                            inputMode="numeric"
                                             value={year}
                                             onChange={(e)=>setYear(e.target.value)}
                                             placeholder="Enter year"
@@ -283,7 +294,9 @@ const AddExpense = () =>{
                                     <div className="mb-4">
                                         <label className="text-sm text-gray-800 mb-1 font-bold block">Electricity</label>
                                         <input 
-                                            type="number"
+                                            type="text"
+                                            pattern="[0-9]*"
+                                            inputMode="numeric"
                                             value={ecity}
                                             onChange={(e)=>setEcity(e.target.value)}
                                             placeholder="Enter electricty expense"
@@ -293,7 +306,9 @@ const AddExpense = () =>{
                                     <div className="mb-4">
                                         <label className="text-sm text-gray-800 mb-1 font-bold block">Water</label>
                                         <input 
-                                            type="number"
+                                            type="text"
+                                            pattern="[0-9]*"
+                                            inputMode="numeric"
                                             value={water}
                                             onChange={(e)=>setWater(e.target.value)}
                                             placeholder="Enter water expense"
@@ -303,7 +318,9 @@ const AddExpense = () =>{
                                     <div className="mb-4">
                                         <label className="text-sm text-gray-800 mb-1 font-bold block">Rent</label>
                                         <input 
-                                            type="number"
+                                            type="text"
+                                            pattern="[0-9]*"
+                                            inputMode="numeric"
                                             value={rent}
                                             onChange={(e)=>setRent(e.target.value)}
                                             placeholder="Enter rent"
@@ -313,7 +330,9 @@ const AddExpense = () =>{
                                     <div className="mb-4">
                                         <label className="text-sm text-gray-800 mb-1 font-bold block">Others</label>
                                         <input 
-                                            type="number"
+                                            type="text"
+                                            pattern="[0-9]*"
+                                            inputMode="numeric"
                                             value={others}
                                             onChange={(e)=>setOthers(e.target.value)}
                                             placeholder="Enter other expense"
@@ -364,7 +383,9 @@ const AddExpense = () =>{
                                     <div className="mb-4">
                                         <label className="text-sm text-gray-800 mb-1 font-bold block">Insurance</label>
                                         <input 
-                                            type="number"
+                                            type="text"
+                                            pattern="[0-9]*"
+                                            inputMode="numeric"
                                             value={insurance}
                                             onChange={(e)=>setInsurance(e.target.value)}
                                             placeholder="Enter insurance amount"
@@ -374,7 +395,9 @@ const AddExpense = () =>{
                                     <div className="mb-4">
                                         <label className="text-sm text-gray-800 mb-1 font-bold block">School fee</label>
                                         <input 
-                                            type="number"
+                                           type="text"
+                                            pattern="[0-9]*"
+                                            inputMode="numeric"
                                             value={schoolFee}
                                             onChange={(e)=>setSchoolFee(e.target.value)}
                                             placeholder="Enter school fee"
@@ -384,7 +407,9 @@ const AddExpense = () =>{
                                     <div className="mb-4">
                                         <label className="text-sm text-gray-800 mb-1 font-bold block">Repair</label>
                                         <input 
-                                            type="number"
+                                            type="text"
+                                            pattern="[0-9]*"
+                                            inputMode="numeric"
                                             value={repair}
                                             onChange={(e)=>setRepair(e.target.value)}
                                             placeholder="Enter repair expenses"

@@ -4,16 +4,19 @@ import { useState } from 'react';
 import Navbar from '../components/Navbar';
 const ReportPage=()=>{
     const[weeklyData, setWeeklyData]=useState(null);
+    const[monthlyData, setMonthlyData]=useState(null);
+    const[occasionalData, setOccasionalData]=useState(null);
+    const[compareData, setCompareData]=useState(null);
     const[showForm, setShowForm]=useState(true);
     const[currentTab, setCurrentTab]=useState('');
     const[startDate, setStartDate]=useState('');
     const[endDate, setEndDate]=useState('');
     const[month, setMonth]=useState('');
-    const[year, setYear]=useState(0);
+    const[year, setYear]=useState('');
     const[month1, setMonth1]=useState('');
-    const[year1, setYear1]=useState(0);
+    const[year1, setYear1]=useState('');
     const[month2, setMonth2]=useState('');
-    const[year2, setYear2]=useState(0);
+    const[year2, setYear2]=useState('');
 
     const handleWeeklyReport=async(e)=>{
         e.preventDefault();
@@ -36,19 +39,82 @@ const ReportPage=()=>{
             console.error("Error fetching weekly report", error);
         }
     }
+
+    const handleMonthlyReport=async(e)=>{
+        e.preventDefault();
+        const token=localStorage.getItem('token');
+        const decoded=jwtDecode(token);
+        const userId=decoded.user.id;
+        console.log("fetching for", month, year);
+        try{
+            const res= await fetch(`https://localhost:3001/api/reports/monthly${userId}/${month}/${year}`,
+                {
+                    headers:{'Content-Type':'application/json', Authorization:`Bearer ${token}`},
+                }
+            );
+            const data= await res.json();
+            console.log("Response:", data);
+            setMonthlyData(data.data);
+            setShowForm(false);
+        }
+        catch(error){
+            console.error("Error fetching monthly report", error);
+        }
+    }
+
+    const handleOccasionalReport=async(e)=>{
+        e.preventDefault();
+        const token=localStorage.getItem('token');
+        const decoded=jwtDecode(token);
+        const userId=decoded.user.id;
+        console.log("Fetching for", year);
+        try{
+            const res= await fetch(`https://localhost:3001/api/reports/occasional/${userId}/${year}`,
+                {
+                    headers:{'Content-Type':'application/json', Authorization:`Bearer ${token}`},
+                }
+            );
+            const data=await res.json();
+            console.log("Response:", data);
+            setOccasionalData(data.data);
+            setShowForm(false);
+        }
+        catch(error){
+            console.error("Error fetching occasional report", error);
+        }
+    }
     
+    const handleCompare=async(e)=>{
+        e.preventDefault();
+        const token=localStorage.getItem('token');
+        const decoded=jwtDecode(token);
+        const userId=decoded.user.id;
+        console.log("Fetching for:", month1, year1, month2, year2);
+        try{
+            const res=await fetch(`https://localhost:3001/api/reports/compare/${userId}/${month1}/${year1}/${month2}/${year2}`,
+                {
+                    headers:{'Content-Type':'application/json', Authorization:`Bearer ${token}`}
+                }
+            );
+            const data=await res.json();
+            console.log("Response:", data);
+            setCompareData(data);
+            setShowForm(false);
+        }
+        catch(error){
+            console.error("Error fetching occasional report", error);
+        }
+    }
     return (
         <div className='bg-gray-400 min-h-screen'>
             <Navbar/>
             <h1 className="text-gray-800 text-3xl sm:4xl md:text-5xl font-bold mb-6 px-4 py-4">Get your REPORT</h1>
             <div className="grid grid-cols-2 gap-4 mx-4 mb-6 sm:flex sm:justify-center sm:space-x-4 sm:gap-0">
                 <button onClick={()=>{setCurrentTab('weekly');
-                                        setShowForm(true);}
-                 }
+                                        setShowForm(true);}}
                         className={`px-4 py-4 shadow-md rounded ${currentTab==="weekly"?"bg-blue-500 text-white hover:bg-blue-600 font-bold":"bg-gray-600 hover:bg-gray-500 text-white"}`}>Weekly</button>
-                <button onClick={()=>{setCurrentTab('monthlyy');
-                                        setShowForm(true);
-                                        setWeeklyData(null);}}
+                <button onClick={()=>{setCurrentTab('monthly');
+                                        setShowForm(true);}}
                         className={`px-4 py-4 shadow-md rounded ${currentTab==="monthly"?"bg-blue-500 text-white hover:bg-blue-600 font-bold":"bg-gray-600 hover:bg-gray-500 text-white"}`}>Monthly</button>
                 <button onClick={()=>{setCurrentTab('occasional');
                                         setShowForm(true);}}
@@ -60,7 +126,7 @@ const ReportPage=()=>{
             
                 {currentTab==="weekly" &&
                         (showForm &&(
-                            <div className="bg-gray-200 flex flex-col justify-center items-center rounded w-full mb-6 max-w-md mx-4 px-5 sm:mx-auto">
+                            <div className="bg-gray-200 p-5 sm:p-6 rounded-lg w-full max-w-md shadow-md mx-auto">
                                 <form onSubmit={handleWeeklyReport} className="w-full py-6">
                                     <h2 className="text-2xl mb-4 mt-4 font-bold">Enter dates</h2>
                                     <div className="mb-4">
@@ -92,7 +158,7 @@ const ReportPage=()=>{
                             {currentTab==='weekly' && !showForm && weeklyData && Object.keys(weeklyData).length>0 &&(
                                 <div className='flex justify-center w-screen items-center'>
                                     <div className='flex items-center justify-center w-full max-w-md mt-4'>
-                                    <div className='bg-gray-200 flex flex-col justify-center rounded-lg p-6 space-y-2  w-full border-gray-400 max-wd-md mx-auto shadow-lg'>
+                                    <div className='bg-gray-200 p-5 sm:p-6 rounded-lg w-full max-w-md shadow-md mx-auto'>
                                         <h2 className='text-2xl font-bold mb-4 border-b pb-2 text-gray-800'>Weekly report</h2>
                                         <div className='flex justify-between'>
                                             <span>Food:</span>
@@ -121,16 +187,14 @@ const ReportPage=()=>{
                                     </div>
                                 </div>
                                 </div>
-                                
-                                    
                                 )}
                                 {currentTab==='weekly' && !showForm && (!weeklyData || Object.keys(weeklyData).length===0) &&
                                     (<div className='bg-red-100 text-red-700 p-4 rounded shadow max-w-md mx-auto'>No data for this range</div>)}
                         
-                    {currentTab==="monthly" &&
-                            <div className="bg-gray-200 flex flex-col justify-center items-center rounded w-full mb-6 max-w-md mx-4 px-5 sm:mx-auto">
+                    {currentTab==="monthly" && showForm &&(
+                        <div className="bg-gray-200 p-5 sm:p-6 rounded-lg w-full max-w-md shadow-md mx-auto">
                                 <h2 className="text-2xl mb-4 mt-4 font-bold">Enter month and year</h2>
-                                <form  className="w-full py-6">
+                                <form onSubmit={handleMonthlyReport} className="w-full py-6">
                                     <div className="mb-4">
                                         <label className="text-sm text-gray-800 mb-1 font-bold block">Month</label>
                                         <select
@@ -160,16 +224,49 @@ const ReportPage=()=>{
                                         className="w-full bg-gray-600 text-white font-bold hover:bg-blue-500 p-1 rounded shadow-md"
                                     >Fetch report</button>
                                 </form>
-                            </div>
-                    }
-                    {currentTab==="occasional" &&
-                        <div className='bg-gray-200 flex flex-col justify-center items-center rounded w-full mb-6 max-w-md mx-4 px-5 sm:mx-auto'>
+                            </div>)}
+                    {currentTab==='monthly' && !showForm && monthlyData && Object.keys(monthlyData).length>0 && (
+                        <div className='flex justify-center w-screen items-center'>
+                                    <div className='flex items-center justify-center w-full max-w-md mt-4'>
+                                    <div className='bg-gray-200 p-5 sm:p-6 rounded-lg w-full max-w-md shadow-md mx-auto'>
+                                        <h2 className='text-2xl font-bold mb-4 border-b pb-2 text-gray-800'>Monthly report</h2>
+                                        <div className='flex justify-between'>
+                                            <span>Electricity:</span>
+                                            <span>₹{monthlyData.totalElectricity ||0}</span>
+                                        </div>
+                                        <div className='flex justify-between'>
+                                            <span>Water:</span>
+                                            <span>₹{monthlyData.totalWater ||0}</span>
+                                        </div>
+                                        <div className='flex justify-between'>
+                                            <span>Rent:</span>
+                                            <span>₹{monthlyData.totalRent||0}</span>
+                                        </div>
+                                        <div className='flex justify-between'>
+                                            <span>Others:</span>
+                                            <span>₹{monthlyData.totalOthers ||0}</span>
+                                        </div>
+                                        <div className='mt-4 pt-2 border-t text-xl font-bold text-gray-800 flex justify-between'>
+                                            <span>Total expense:</span>
+                                            <span>₹{monthlyData.totalMonthly || 0}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                    )}   
+                    {currentTab==='monthly' && !showForm && (!monthlyData || Object.keys(monthlyData).length===0) &&
+                                    (<div className='bg-red-100 text-red-700 p-4 rounded shadow max-w-md mx-auto'>No data for this month</div>)}
+
+                    {currentTab==="occasional" && showForm && (
+                        <div className='bg-gray-200 p-5 sm:p-6 rounded-lg w-full max-w-md shadow-md mx-auto'>
                             <h1 className='text-gray-800 text-2xl mb-4 mt-4 font-bold'>Enter year</h1>
-                            <form className='w-full py-6'>
+                            <form onSubmit={handleOccasionalReport} className='w-full py-6'>
                                 <div className='mb-4'>
                                     <label className="text-sm text-gray-800 mb-1 font-bold block">Year</label>
                                         <input 
-                                            type="number"
+                                            type="text"
+                                            pattern='[0-9]*'
+                                            inputMode='numeric'
                                             value={year}
                                             onChange={(e)=>setYear(e.target.value)}
                                             placeholder="Enter year"
@@ -182,10 +279,38 @@ const ReportPage=()=>{
                                     >Fetch report</button>
                             </form>
                         </div>
-                    }
-                    {currentTab==="compare" &&
-                            <div className="bg-gray-200 flex flex-col justify-center items-center rounded w-full mb-6 max-w-md mx-4 px-5 sm:mx-auto">
-                                <form  className="w-full py-6">
+                    )}
+                    {currentTab==='occasional' && !showForm && occasionalData && Object.keys(occasionalData).length>0 && (
+                        <div className='flex justify-center w-screen items-center'>
+                                    <div className='flex items-center justify-center w-full max-w-md mt-4'>
+                                    <div className='bg-gray-200 p-5 sm:p-6 rounded-lg w-full max-w-md shadow-md mx-auto'>
+                                        <h2 className='text-2xl font-bold mb-4 border-b pb-2 text-gray-800'>Occasional report</h2>
+                                        <div className='flex justify-between'>
+                                            <span>Insurance:</span>
+                                            <span>₹{occasionalData.totalInsurance ||0}</span>
+                                        </div>
+                                        <div className='flex justify-between'>
+                                            <span>School Fee:</span>
+                                            <span>₹{occasionalData.totalSchoolFee ||0}</span>
+                                        </div>
+                                        <div className='flex justify-between'>
+                                            <span>Repair:</span>
+                                            <span>₹{occasionalData.totalRepair||0}</span>
+                                        </div>
+                                        <div className='mt-4 pt-2 border-t text-xl font-bold text-gray-800 flex justify-between'>
+                                            <span>Total expense:</span>
+                                            <span>₹{occasionalData.totalOccasional || 0}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                    ) }
+                    {currentTab==='occasional' && !showForm && (!occasionalData || Object.keys(occasionalData).length===0) &&
+                                    (<div className='bg-red-100 text-red-700 p-4 rounded shadow max-w-md mx-auto'>No data for this year</div>)}
+
+                    {currentTab==="compare" && showForm && (
+                        <div className="bg-gray-200 p-5 sm:p-6 rounded-lg w-full max-w-md shadow-md mx-auto">
+                                <form onSubmit={handleCompare} className="w-full py-6">
                                     <div className="mb-4">
                                         <h1 className="text-2xl mb-4 mt-4 font-bold">Enter first month and year</h1>
                                         <label className="text-sm text-gray-800 mb-1 font-bold block">Month</label>
@@ -204,8 +329,10 @@ const ReportPage=()=>{
                                     <div className="mb-4">
                                         <label className="text-sm text-gray-800 mb-1 font-bold block">Year</label>
                                         <input 
-                                            type="number"
+                                            type="text"
                                             value={year1}
+                                            pattern='[0-9]*'
+                                            inputMode='numeric'
                                             onChange={(e)=>setYear1(e.target.value)}
                                             placeholder="Enter year"
                                             className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-500"
@@ -242,7 +369,61 @@ const ReportPage=()=>{
                                     >Fetch report</button>
                                 </form>
                             </div>
+                        )
                     }
+                    {currentTab==='compare' && !showForm && compareData && (
+                        <div className='flex justify-center w-screen items-center'>
+                                <div className='flex items-center justify-center w-full max-w-md mt-4'>
+                                    <div className='bg-gray-200 p-5 sm:p-6 rounded-lg w-full max-w-md shadow-md mx-auto'>
+                                        <h2 className='text-2xl font-bold mb-4 border-b pb-2 text-gray-800'>Comparison report</h2>
+                                        <div className='mb-4 space-y-1'>
+                                            <div className='flex justify-between'>
+                                                <span>{Object.keys(compareData.totalComp)[0]}</span>
+                                                <span>₹{compareData.totalComp[Object.keys(compareData.totalComp)[0]]}</span>
+                                            </div>
+                                            
+                                            <div className='flex justify-between'>
+                                                <span>Difference:</span>
+                                                <span>₹{compareData.totalComp.difference}</span>
+                                            </div>
+                                            <div className='flex justify-between'>
+                                                <span>More in:</span>
+                                                <span>₹{compareData.totalComp.more}</span>
+                                            </div>
+                                            <div className='text-sm text-gray-600 mt-2 italic font-bold'>
+                                                Reason:{compareData.totalComp.reason}
+                                            </div>
+                                        </div>
+                                        <div className='border-gray-400 border-t pt-3 mt-3'>
+                                            <h3 className='text-xl font-semibold mb-2 text-gray-800'>Category-wise breakdown</h3>
+                                            {Object.entries(compareData.individual).map(([category, value])=>(
+                                                <div className='mb-3' key={category}>
+                                                    <div className='text-gray-700 font-medium mb-1'>
+                                                        {category.replace('total','')}
+                                                    </div>
+                                                    <div className='flex justify-between text-sm'>
+                                                        <span>{Object.keys(value)[0]}:</span>
+                                                        <span>₹{value[Object.keys(value)[0]]}</span>
+                                                    </div>
+                                                    <div className='flex justify-between text-sm'>
+                                                        <span>{Object.keys(value)[1]}:</span>
+                                                        <span>₹{value[Object.keys(value)[1]]}</span>
+                                                    </div>
+                                                    <div className='flex justify-between text-sm'>
+                                                        <span>Difference:</span>
+                                                        <span>₹{value.difference}</span>
+                                                    </div>
+                                                    <div className='flex justify-between text-sm'>
+                                                        <span>More in:</span>
+                                                        <span>₹{value.moreIn}</span>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                    )}
             
         </div>
     );

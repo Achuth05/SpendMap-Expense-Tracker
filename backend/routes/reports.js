@@ -4,6 +4,7 @@ const router=express.Router();
 const auth = require('../middleware/auth');
 const daily=require('../models/DailyExp');
 const monthly=require('../models/MonthlyBill');
+const nonRegular=require('../models/NonRegular');
 router.get('/weekly/:id', auth, async(req,res)=>{
     try{
         const id=req.params.id;
@@ -62,7 +63,7 @@ router.get('/monthly/:id/:month/:year', auth, async(req,res)=>{
             const monthlyExpense=await monthly.aggregate([
                 {
                     $match:{
-                        userId:mongoose.Types.ObjectId(id),
+                        userId: new mongoose.Types.ObjectId(id),
                         month:reqMonth,
                         year:reqYear
                     }
@@ -85,14 +86,44 @@ router.get('/monthly/:id/:month/:year', auth, async(req,res)=>{
         res.status(400).send('Report failed');
     }
  }); 
+
+router.get('/occasional/:id/:year', auth, async(req, res)=>{
+    try{
+        const id=req.params.id;
+        const year=parseInt(req.params.year);
+        const occasional=await nonRegular.aggregate([
+            {
+                $match:{
+                    userId: new mongoose.Types.ObjectId(id),
+                    year:year
+                }
+            },
+            {
+                $group:{
+                    _id:null,
+                    totalInsurance:{$sum:"$insurance"},
+                    totalSchoolFee:{$sum:"$schoolFee"},
+                    totalRepair:{$sum:"$repair"},
+                    totalOccasional:{$sum:"$total"}
+                }
+            }
+        ]);
+        res.status(200).json({msg:"Occasional report", data:occasional[0]||{}});
+    }
+    catch(error){
+        res.status(400).send("Report failed");
+    }
+});
    
 router.get('/compare/:id/:month1/:year1/:month2/:year2', auth, async(req,res)=>{
     try{
-        const{id, month1, year1, month2, year2}=req.params;
+        const{id, month1, month2}=req.params;
+        const year1=parseInt(req.params.year1);
+        const year2=parseInt(req.params.year2);
         const compare=await monthly.aggregate([
             {
                 $match:{
-                    userId:mongoose.Types.ObjectId(id),
+                    userId: new mongoose.Types.ObjectId(id),
                     $or:[
                         {month:month1, year:parseInt(year1)},
                         {month:month2, year:parseInt(year2)}
