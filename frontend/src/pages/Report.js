@@ -47,7 +47,7 @@ const ReportPage=()=>{
         const userId=decoded.user.id;
         console.log("fetching for", month, year);
         try{
-            const res= await fetch(`https://localhost:3001/api/reports/monthly${userId}/${month}/${year}`,
+            const res= await fetch(`http://localhost:3001/api/reports/monthly/${userId}/${month}/${year}`,
                 {
                     headers:{'Content-Type':'application/json', Authorization:`Bearer ${token}`},
                 }
@@ -69,7 +69,7 @@ const ReportPage=()=>{
         const userId=decoded.user.id;
         console.log("Fetching for", year);
         try{
-            const res= await fetch(`https://localhost:3001/api/reports/occasional/${userId}/${year}`,
+            const res= await fetch(`http://localhost:3001/api/reports/occasional/${userId}/${year}`,
                 {
                     headers:{'Content-Type':'application/json', Authorization:`Bearer ${token}`},
                 }
@@ -91,7 +91,7 @@ const ReportPage=()=>{
         const userId=decoded.user.id;
         console.log("Fetching for:", month1, year1, month2, year2);
         try{
-            const res=await fetch(`https://localhost:3001/api/reports/compare/${userId}/${month1}/${year1}/${month2}/${year2}`,
+            const res=await fetch(`http://localhost:3001/api/reports/compare/${userId}/${month1}/${year1}/${month2}/${year2}`,
                 {
                     headers:{'Content-Type':'application/json', Authorization:`Bearer ${token}`}
                 }
@@ -126,37 +126,40 @@ const ReportPage=()=>{
             
                 {currentTab==="weekly" &&
                         (showForm &&(
-                            <div className="bg-gray-200 p-5 sm:p-6 rounded-lg w-full max-w-md shadow-md mx-auto">
-                                <form onSubmit={handleWeeklyReport} className="w-full py-6">
-                                    <h2 className="text-2xl mb-4 mt-4 font-bold">Enter dates</h2>
-                                    <div className="mb-4">
-                                        <label className="text-sm text-gray-800 mb-1 font-bold block">Start date</label>
-                                        <input 
-                                            type="date"
-                                            value={startDate}
-                                            onChange={(e)=>setStartDate(e.target.value)}
-                                            placeholder="Enter start date"
-                                            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-500"
-                                        />
-                                    </div>
-                                    <div className="mb-4">
-                                        <label className="text-sm text-gray-800 mb-1 font-bold block">End date</label>
-                                        <input 
-                                            type="date"
-                                            value={endDate}
-                                            onChange={(e)=>setEndDate(e.target.value)}
-                                            placeholder="Enter start date"
-                                            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-500"
-                                        />
-                                    </div>
-                                    <button 
-                                        type="submit"
-                                        className="w-full bg-gray-600 text-white font-bold hover:bg-blue-500 p-1 rounded shadow-md"
-                                    >Fetch report</button>
-                                </form>
-                            </div>))}
+                            <div className='w-full px-4 py-6'>
+                                <div className="bg-gray-200 p-5 sm:p-6 rounded-lg w-full max-w-md shadow-md mx-auto">
+                                    <form onSubmit={handleWeeklyReport} className="w-full py-6">
+                                        <h2 className="text-2xl mb-4 mt-4 font-bold">Enter dates</h2>
+                                        <div className="mb-4">
+                                            <label className="text-sm text-gray-800 mb-1 font-bold block">Start date</label>
+                                            <input 
+                                                type="date"
+                                                value={startDate}
+                                                onChange={(e)=>setStartDate(e.target.value)}
+                                                placeholder="Enter start date"
+                                                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                                            />
+                                        </div>
+                                        <div className="mb-4">
+                                            <label className="text-sm text-gray-800 mb-1 font-bold block">End date</label>
+                                            <input 
+                                                type="date"
+                                                value={endDate}
+                                                onChange={(e)=>setEndDate(e.target.value)}
+                                                placeholder="Enter start date"
+                                                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                                            />
+                                        </div>
+                                        <button 
+                                            type="submit"
+                                            className="w-full bg-gray-600 text-white font-bold hover:bg-blue-500 p-1 rounded shadow-md"
+                                        >Fetch report</button>
+                                    </form>
+                                </div>
+                            </div>
+                            ))}
                             {currentTab==='weekly' && !showForm && weeklyData && Object.keys(weeklyData).length>0 &&(
-                                <div className='flex justify-center w-screen items-center'>
+                                <div className='w-full px-4 py-6'>
                                     <div className='flex items-center justify-center w-full max-w-md mt-4'>
                                     <div className='bg-gray-200 p-5 sm:p-6 rounded-lg w-full max-w-md shadow-md mx-auto'>
                                         <h2 className='text-2xl font-bold mb-4 border-b pb-2 text-gray-800'>Weekly report</h2>
@@ -192,7 +195,8 @@ const ReportPage=()=>{
                                     (<div className='bg-red-100 text-red-700 p-4 rounded shadow max-w-md mx-auto'>No data for this range</div>)}
                         
                     {currentTab==="monthly" && showForm &&(
-                        <div className="bg-gray-200 p-5 sm:p-6 rounded-lg w-full max-w-md shadow-md mx-auto">
+                        <div className='w-full px-4 py-6'>
+                            <div className="bg-gray-200 p-5 sm:p-6 rounded-lg w-full max-w-md shadow-md mx-auto">
                                 <h2 className="text-2xl mb-4 mt-4 font-bold">Enter month and year</h2>
                                 <form onSubmit={handleMonthlyReport} className="w-full py-6">
                                     <div className="mb-4">
@@ -224,9 +228,11 @@ const ReportPage=()=>{
                                         className="w-full bg-gray-600 text-white font-bold hover:bg-blue-500 p-1 rounded shadow-md"
                                     >Fetch report</button>
                                 </form>
-                            </div>)}
+                            </div>
+                        </div>
+                    )}
                     {currentTab==='monthly' && !showForm && monthlyData && Object.keys(monthlyData).length>0 && (
-                        <div className='flex justify-center w-screen items-center'>
+                        <div className='w-full px-4 py-6'>
                                     <div className='flex items-center justify-center w-full max-w-md mt-4'>
                                     <div className='bg-gray-200 p-5 sm:p-6 rounded-lg w-full max-w-md shadow-md mx-auto'>
                                         <h2 className='text-2xl font-bold mb-4 border-b pb-2 text-gray-800'>Monthly report</h2>
@@ -258,30 +264,32 @@ const ReportPage=()=>{
                                     (<div className='bg-red-100 text-red-700 p-4 rounded shadow max-w-md mx-auto'>No data for this month</div>)}
 
                     {currentTab==="occasional" && showForm && (
-                        <div className='bg-gray-200 p-5 sm:p-6 rounded-lg w-full max-w-md shadow-md mx-auto'>
-                            <h1 className='text-gray-800 text-2xl mb-4 mt-4 font-bold'>Enter year</h1>
-                            <form onSubmit={handleOccasionalReport} className='w-full py-6'>
-                                <div className='mb-4'>
-                                    <label className="text-sm text-gray-800 mb-1 font-bold block">Year</label>
-                                        <input 
-                                            type="text"
-                                            pattern='[0-9]*'
-                                            inputMode='numeric'
-                                            value={year}
-                                            onChange={(e)=>setYear(e.target.value)}
-                                            placeholder="Enter year"
-                                            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-500"
-                                        />
-                                </div>
-                                <button 
-                                        type="submit"
-                                        className="w-full bg-gray-600 text-white font-bold hover:bg-blue-500 p-1 rounded shadow-md"
-                                    >Fetch report</button>
-                            </form>
+                        <div className='w-full px-4 py-6'>
+                            <div className='bg-gray-200 p-5 sm:p-6 rounded-lg w-full max-w-md shadow-md mx-auto'>
+                                <h1 className='text-gray-800 text-2xl mb-4 mt-4 font-bold'>Enter year</h1>
+                                <form onSubmit={handleOccasionalReport} className='w-full py-6'>
+                                    <div className='mb-4'>
+                                        <label className="text-sm text-gray-800 mb-1 font-bold block">Year</label>
+                                            <input 
+                                                type="text"
+                                                pattern='[0-9]*'
+                                                inputMode='numeric'
+                                                value={year}
+                                                onChange={(e)=>setYear(e.target.value)}
+                                                placeholder="Enter year"
+                                                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                                            />
+                                    </div>
+                                    <button 
+                                            type="submit"
+                                            className="w-full bg-gray-600 text-white font-bold hover:bg-blue-500 p-1 rounded shadow-md"
+                                        >Fetch report</button>
+                                </form>
+                            </div>
                         </div>
                     )}
                     {currentTab==='occasional' && !showForm && occasionalData && Object.keys(occasionalData).length>0 && (
-                        <div className='flex justify-center w-screen items-center'>
+                        <div className='w-full px-4 py-6'>
                                     <div className='flex items-center justify-center w-full max-w-md mt-4'>
                                     <div className='bg-gray-200 p-5 sm:p-6 rounded-lg w-full max-w-md shadow-md mx-auto'>
                                         <h2 className='text-2xl font-bold mb-4 border-b pb-2 text-gray-800'>Occasional report</h2>
@@ -309,7 +317,8 @@ const ReportPage=()=>{
                                     (<div className='bg-red-100 text-red-700 p-4 rounded shadow max-w-md mx-auto'>No data for this year</div>)}
 
                     {currentTab==="compare" && showForm && (
-                        <div className="bg-gray-200 p-5 sm:p-6 rounded-lg w-full max-w-md shadow-md mx-auto">
+                        <div className='w-full px-4 py-6'>
+                            <div className="bg-gray-200 p-5 sm:p-6 rounded-lg w-full max-w-md shadow-md mx-auto">
                                 <form onSubmit={handleCompare} className="w-full py-6">
                                     <div className="mb-4">
                                         <h1 className="text-2xl mb-4 mt-4 font-bold">Enter first month and year</h1>
@@ -369,11 +378,12 @@ const ReportPage=()=>{
                                     >Fetch report</button>
                                 </form>
                             </div>
+                        </div>
                         )
                     }
                     {currentTab==='compare' && !showForm && compareData && (
-                        <div className='flex justify-center w-screen items-center'>
-                                <div className='flex items-center justify-center w-full max-w-md mt-4'>
+                        <div className='w-full px-4 py-6'>
+                                <div className='flex items-center justify-center w-full max-w-md sm:p-6 mx-auto'>
                                     <div className='bg-gray-200 p-5 sm:p-6 rounded-lg w-full max-w-md shadow-md mx-auto'>
                                         <h2 className='text-2xl font-bold mb-4 border-b pb-2 text-gray-800'>Comparison report</h2>
                                         <div className='mb-4 space-y-1'>
@@ -381,17 +391,20 @@ const ReportPage=()=>{
                                                 <span>{Object.keys(compareData.totalComp)[0]}</span>
                                                 <span>₹{compareData.totalComp[Object.keys(compareData.totalComp)[0]]}</span>
                                             </div>
-                                            
+                                            <div className='flex justify-between'>
+                                                <span>{Object.keys(compareData.totalComp)[1]}</span>
+                                                <span>₹{compareData.totalComp[Object.keys(compareData.totalComp)[1]]}</span>
+                                            </div>
                                             <div className='flex justify-between'>
                                                 <span>Difference:</span>
                                                 <span>₹{compareData.totalComp.difference}</span>
                                             </div>
                                             <div className='flex justify-between'>
                                                 <span>More in:</span>
-                                                <span>₹{compareData.totalComp.more}</span>
+                                                <span>{compareData.totalComp.more}</span>
                                             </div>
                                             <div className='text-sm text-gray-600 mt-2 italic font-bold'>
-                                                Reason:{compareData.totalComp.reason}
+                                                Reason: {compareData.totalComp.reason}
                                             </div>
                                         </div>
                                         <div className='border-gray-400 border-t pt-3 mt-3'>
@@ -415,7 +428,7 @@ const ReportPage=()=>{
                                                     </div>
                                                     <div className='flex justify-between text-sm'>
                                                         <span>More in:</span>
-                                                        <span>₹{value.moreIn}</span>
+                                                        <span>{value.moreIn}</span>
                                                     </div>
                                                 </div>
                                             ))}

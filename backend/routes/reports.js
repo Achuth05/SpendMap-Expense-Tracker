@@ -95,7 +95,9 @@ router.get('/occasional/:id/:year', auth, async(req, res)=>{
             {
                 $match:{
                     userId: new mongoose.Types.ObjectId(id),
-                    year:year
+                    $expr:{
+                        $eq:[{$year:"$date"}, parseInt(year)]
+                    }
                 }
             },
             {
@@ -157,7 +159,7 @@ router.get('/compare/:id/:month1/:year1/:month2/:year2', auth, async(req,res)=>{
                 return m1 - m2;
             });
             const [monthA, monthB] = compare;
-            const fields = ['totalElectricity', 'totalWater', 'totalRent', 'totalOthers', 'totalMonthly'];
+            const fields = ['totalElectricity', 'totalWater', 'totalRent', 'totalOthers'];
             const differences={};
             fields.forEach(field=>{
                 const value1=monthA[field]||0;
@@ -165,8 +167,8 @@ router.get('/compare/:id/:month1/:year1/:month2/:year2', auth, async(req,res)=>{
                 const diff=Math.abs(value1-value2);
                 const greater=value1===value2?'Equal':(value1>value2?monthA._id.month:monthB._id.month);
                 differences[field]={
-                    [`${monthA._id.month},${monthA._id.year}`]:value1,
-                    [`${monthB._id.month},${monthB._id.year}`]:value2,
+                    [`${monthA._id.month}, ${monthA._id.year}`]:value1,
+                    [`${monthB._id.month}, ${monthB._id.year}`]:value2,
                     difference:diff,
                     moreIn:greater
                 };
@@ -194,7 +196,7 @@ router.get('/compare/:id/:month1/:year1/:month2/:year2', auth, async(req,res)=>{
                     [`${monthA._id.month}, ${monthA._id.year}`]:monthA.totalMonthly,
                     [`${monthB._id.month}, ${monthB._id.year}`]:monthB.totalMonthly,
                     difference:Math.abs(monthA.totalMonthly-monthB.totalMonthly),
-                    more:monthA.totalMonthly>monthB.totalMonthly?`${monthA._id.month},${monthA._id.year}`:`${monthB._id.month},${monthB._id.year}`,
+                    more:monthA.totalMonthly>monthB.totalMonthly?`${monthA._id.month}, ${monthA._id.year}`:`${monthB._id.month}, ${monthB._id.year}`,
                     reason: spike ? `Major difference was in ${spike}` : 'No significant spike'
                 },
                 individual:differences
