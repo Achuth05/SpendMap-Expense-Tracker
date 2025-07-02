@@ -2,6 +2,7 @@ import React from 'react';
 import Protected from './components/Protected';
 import { Routes, Route} from 'react-router-dom';
 import HomePage from './pages/Home';
+import AboutPage from './pages/About';
 import RegisterPage from './pages/Register';
 import LoginPage from './pages/Login';
 import AddExpense from './pages/Add';
@@ -16,7 +17,8 @@ function App() {
           {/*<Navbar/>*/}
           <Routes>
             <Route path="/register" element={<RegisterPage/>}/>
-            <Route path="/" element={<LoginPage/>}/>
+            <Route path='/login' element={<LoginPage/>}/>
+            <Route path="/" element={<AboutPage/>}/>
             <Route path="/home" element={<Protected><HomePage/></Protected>}/>
             <Route path="/add" element={<Protected><AddExpense/></Protected>}/>
             <Route path="/report" element={<Protected><ReportPage/></Protected>}/>
