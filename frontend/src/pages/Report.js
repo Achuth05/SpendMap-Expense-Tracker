@@ -160,7 +160,7 @@ const ReportPage=()=>{
                             ))}
                             {currentTab==='weekly' && !showForm && weeklyData && Object.keys(weeklyData).length>0 &&(
                                 <div className='w-full px-4 py-6'>
-                                    <div className='flex items-center justify-center w-full max-w-md mt-4'>
+                                    <div className='flex items-center justify-center w-full max-w-md sm:p-6 mx-auto'>
                                     <div className='bg-gray-200 p-5 sm:p-6 rounded-lg w-full max-w-md shadow-md mx-auto'>
                                         <h2 className='text-2xl font-bold mb-4 border-b pb-2 text-gray-800'>Weekly report</h2>
                                         <div className='flex justify-between'>
@@ -233,7 +233,7 @@ const ReportPage=()=>{
                     )}
                     {currentTab==='monthly' && !showForm && monthlyData && Object.keys(monthlyData).length>0 && (
                         <div className='w-full px-4 py-6'>
-                                    <div className='flex items-center justify-center w-full max-w-md mt-4'>
+                                    <div className='flex items-center justify-center w-full max-w-md sm:p-6 mx-auto'>
                                     <div className='bg-gray-200 p-5 sm:p-6 rounded-lg w-full max-w-md shadow-md mx-auto'>
                                         <h2 className='text-2xl font-bold mb-4 border-b pb-2 text-gray-800'>Monthly report</h2>
                                         <div className='flex justify-between'>
@@ -290,7 +290,7 @@ const ReportPage=()=>{
                     )}
                     {currentTab==='occasional' && !showForm && occasionalData && Object.keys(occasionalData).length>0 && (
                         <div className='w-full px-4 py-6'>
-                                    <div className='flex items-center justify-center w-full max-w-md mt-4'>
+                                    <div className='flex items-center justify-center w-full max-w-md sm:p-6 mx-auto'>
                                     <div className='bg-gray-200 p-5 sm:p-6 rounded-lg w-full max-w-md shadow-md mx-auto'>
                                         <h2 className='text-2xl font-bold mb-4 border-b pb-2 text-gray-800'>Occasional report</h2>
                                         <div className='flex justify-between'>

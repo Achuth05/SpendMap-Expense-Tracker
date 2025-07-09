@@ -8,7 +8,7 @@ const Navbar=()=>{
     const[hamburger, setHamburger]=useState(false);
     const handleLogout=()=>{
         localStorage.removeItem('token');
-        navigate('/');
+        navigate('/login');
     }
     return (
     <nav className="bg-gray-300 shadow-md px-4 py-3">

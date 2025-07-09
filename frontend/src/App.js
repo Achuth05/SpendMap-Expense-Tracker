@@ -8,6 +8,8 @@ import LoginPage from './pages/Login';
 import AddExpense from './pages/Add';
 import ReportPage from './pages/Report';
 import Profile from './pages/Profile';
+import Change from './pages/ChangePwd';
+import Edit from './pages/EditProfile';
 import './App.css';
 
 
@@ -23,6 +25,8 @@ function App() {
             <Route path="/add" element={<Protected><AddExpense/></Protected>}/>
             <Route path="/report" element={<Protected><ReportPage/></Protected>}/>
             <Route path="/profile" element={<Protected><Profile/></Protected>}/>
+            <Route path="/change-password" element={<Protected><Change/></Protected>}/>
+            <Route path="/edit-profile" element={<Protected><Edit/></Protected>}/>
           </Routes>
       </>
   );
