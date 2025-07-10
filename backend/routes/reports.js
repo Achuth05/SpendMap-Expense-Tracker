@@ -56,7 +56,7 @@ router.get('/monthly/:id/:month/:year', auth, async(req,res)=>{
            'July', 'August', 'September', 'October', 'November', 'December'
         ];
         if(currentDate.getMonth()==months.indexOf(reqMonth) && currentDate.getFullYear()==reqYear){
-            res.status(400).send('Report not generated');
+            res.status(400).json({msg:'Report not generated'});
             return;
         }
         else{
@@ -208,4 +208,73 @@ router.get('/compare/:id/:month1/:year1/:month2/:year2', auth, async(req,res)=>{
         res.status(400).send('Comparison failed');
     }
 });
+
+router.get('/summary:id', auth, async(req,res)=>{
+    const getMonthName=(monthNo)=>{
+        const months=['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September','October', 'November', 'December'];
+        return months[monthNo];
+    }
+    try{
+        const id=req.params.id;
+        const currDate=new Date();
+        const currMonth=currDate.getMonth();
+        const currYear=currDate.getFullYear();
+        const [dailySum, monthlySum, occasionalSum]= await Promise.all([
+            daily.aggregate([
+                {
+                    $match:{
+                        userId: new mongoose.Types.ObjectId(id),
+                        $expr:{
+                            $and:[
+                                {$eq:[{$month:"$date"}, currMonth+1]},
+                                {$eq:[{$year:"$date"}, currYear]}
+                            ]
+                        }
+                    }
+                },
+                {
+                    $group:{_id:null, total:{$sum:"$total"}}
+                }
+            ]),
+            monthly.aggregate([
+                {
+                    $match:{
+                        userId:new mongoose.Types.ObjectId(id),
+                        month:getMonthName(currMonth),
+                        year:currYear.toString()
+                    }
+                },
+                {
+                    $group:{_id:null, total:{$sum:"$total"}}
+                }
+            ]),
+            nonRegular.aggregate([
+                {
+                    $match:{
+                        userId: new mongoose.Types.ObjectId(id),
+                        $expr:{
+                            $and:[
+                                {$eq:[{$month:"$date"}, currMonth+1]},
+                                {$eq:[{$year:"$date"}, currYear]}
+                            ]
+                        }
+                    }
+                },
+                {
+                    $group:{_id:null, total:{$sum:"$total"}}
+                }
+            ])
+        ]);
+        res.json({
+            dailySum:dailySum[0]?.total || 0,
+            monthlySum:monthlySum[0]?.total || 0,
+            occasionalSum:occasionalSum[0]?.total || 0,
+            total:(dailySum[0]?.total || 0)+(monthlySum[0]?.total || 0)+(occasionalSum[0]?.total || 0)
+        });
+    }
+    catch(err){
+         console.error("Failed to fetch current summary", err);   
+    }
+})
+
 module.exports=router;

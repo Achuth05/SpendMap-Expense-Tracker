@@ -34,7 +34,7 @@ const LoginPage = () => {
         if(res.ok){
           console.log("Login success:",data);
           localStorage.setItem('token', data.token);
-          navigate('/home');
+          navigate('/home', {state:{loggedin:true, username:data.user.username}});
         }
         else{
           setError(data.msg||"Login failed");
@@ -44,6 +44,7 @@ const LoginPage = () => {
       console.log(err);
       setError("Something went wrong!");
     }
+
   }
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-400 px-4 ">
