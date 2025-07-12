@@ -1,14 +1,16 @@
 import React from 'react';
 import {jwtDecode} from 'jwt-decode';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 const ReportPage=()=>{
+    const navigate=useNavigate();
     const[weeklyData, setWeeklyData]=useState(null);
     const[monthlyData, setMonthlyData]=useState(null);
     const[occasionalData, setOccasionalData]=useState(null);
     const[compareData, setCompareData]=useState(null);
     const[showForm, setShowForm]=useState(true);
-    const[currentTab, setCurrentTab]=useState('');
+    const[currentTab, setCurrentTab]=useState('weekly');
     const[startDate, setStartDate]=useState('');
     const[endDate, setEndDate]=useState('');
     const[month, setMonth]=useState('');
@@ -156,43 +158,59 @@ const ReportPage=()=>{
                                         >Fetch report</button>
                                     </form>
                                 </div>
+                                <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mt-5 ml-5 mb-6" 
+                                        onClick={()=>{navigate('/home')}}>
+                                    Back
+                                </button>
                             </div>
                             ))}
                             {currentTab==='weekly' && !showForm && weeklyData && Object.keys(weeklyData).length>0 &&(
                                 <div className='w-full px-4 py-6'>
                                     <div className='flex items-center justify-center w-full max-w-md sm:p-6 mx-auto'>
-                                    <div className='bg-gray-200 p-5 sm:p-6 rounded-lg w-full max-w-md shadow-md mx-auto'>
-                                        <h2 className='text-2xl font-bold mb-4 border-b pb-2 text-gray-800'>Weekly report</h2>
-                                        <div className='flex justify-between'>
-                                            <span>Food:</span>
-                                            <span>₹{weeklyData.totalFood ||0}</span>
-                                        </div>
-                                        <div className='flex justify-between'>
-                                            <span>Travel:</span>
-                                            <span>₹{weeklyData.totalTravel ||0}</span>
-                                        </div>
-                                        <div className='flex justify-between'>
-                                            <span>Entertainment:</span>
-                                            <span>₹{weeklyData.totalEntertainment||0}</span>
-                                        </div>
-                                        <div className='flex justify-between'>
-                                            <span>Shopping:</span>
-                                            <span>₹{weeklyData.totalShopping ||0}</span>
-                                        </div>
-                                        <div className='flex justify-between'>
-                                            <span>Others:</span>
-                                            <span>₹{weeklyData.totalOthers ||0}</span>
-                                        </div>
-                                        <div className='mt-4 pt-2 border-t text-xl font-bold text-gray-800 flex justify-between'>
-                                            <span>Total expense:</span>
-                                            <span>₹{weeklyData.totalAmount || 0}</span>
+                                        <div className='bg-gray-200 p-5 sm:p-6 rounded-lg w-full max-w-md shadow-md mx-auto'>
+                                            <h2 className='text-2xl font-bold mb-4 border-b pb-2 text-gray-800'>Weekly report</h2>
+                                            <div className='flex justify-between'>
+                                                <span>Food:</span>
+                                                <span>₹{weeklyData.totalFood ||0}</span>
+                                            </div>
+                                            <div className='flex justify-between'>
+                                                <span>Travel:</span>
+                                                <span>₹{weeklyData.totalTravel ||0}</span>
+                                            </div>
+                                            <div className='flex justify-between'>
+                                                <span>Entertainment:</span>
+                                                <span>₹{weeklyData.totalEntertainment||0}</span>
+                                            </div>
+                                            <div className='flex justify-between'>
+                                                <span>Shopping:</span>
+                                                <span>₹{weeklyData.totalShopping ||0}</span>
+                                            </div>
+                                            <div className='flex justify-between'>
+                                                <span>Others:</span>
+                                                <span>₹{weeklyData.totalOthers ||0}</span>
+                                            </div>
+                                            <div className='mt-4 pt-2 border-t text-xl font-bold text-gray-800 flex justify-between'>
+                                                <span>Total expense:</span>
+                                                <span>₹{weeklyData.totalAmount || 0}</span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                    <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mt-5 ml-5 mb-6" 
+                                        onClick={()=>{setShowForm(true)}}>
+                                        Back
+                                    </button>
                                 </div>
                                 )}
                                 {currentTab==='weekly' && !showForm && (!weeklyData || Object.keys(weeklyData).length===0) &&
-                                    (<div className='bg-red-100 text-red-700 p-4 rounded shadow max-w-md mx-auto'>No data for this range</div>)}
+                                    (
+                                    <>
+                                    <div className='bg-red-100 text-red-700 p-4 rounded shadow max-w-md mx-auto'>No data for this range</div>
+                                    <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mt-5 ml-5 mb-6" 
+                                                onClick={()=>{setShowForm(true)}}>
+                                            Back
+                                    </button>
+                                    </>
+                                    )}
                         
                     {currentTab==="monthly" && showForm &&(
                         <div className='w-full px-4 py-6'>
@@ -229,6 +247,10 @@ const ReportPage=()=>{
                                     >Fetch report</button>
                                 </form>
                             </div>
+                            <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mt-5 ml-5 mb-6" 
+                                        onClick={()=>{navigate('/home')}}>
+                                Back
+                            </button>
                         </div>
                     )}
                     {currentTab==='monthly' && !showForm && monthlyData && Object.keys(monthlyData).length>0 && (
@@ -258,10 +280,23 @@ const ReportPage=()=>{
                                         </div>
                                     </div>
                                 </div>
-                                </div>
+                                <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mt-5 ml-5 mb-6" 
+                                                onClick={()=>{setShowForm(true)}}>
+                                            Back
+                                </button>
+                        </div>
                     )}   
                     {currentTab==='monthly' && !showForm && (!monthlyData || Object.keys(monthlyData).length===0) &&
-                                    (<div className='bg-red-100 text-red-700 p-4 rounded shadow max-w-md mx-auto'>No data for this month</div>)}
+                                    (
+                                    <>
+                                        <div className='bg-red-100 text-red-700 p-4 rounded shadow max-w-md mx-auto'>No data for this month</div>
+                                         <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mt-5 ml-5 mb-6" 
+                                                onClick={()=>{setShowForm(true)}}>
+                                            Back
+                                        </button>
+                                    </>
+                                    
+                                    )}
 
                     {currentTab==="occasional" && showForm && (
                         <div className='w-full px-4 py-6'>
@@ -286,11 +321,15 @@ const ReportPage=()=>{
                                         >Fetch report</button>
                                 </form>
                             </div>
+                            <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mt-5 ml-5 mb-6" 
+                                        onClick={()=>{navigate('/home')}}>
+                                    Back
+                            </button>
                         </div>
                     )}
                     {currentTab==='occasional' && !showForm && occasionalData && Object.keys(occasionalData).length>0 && (
                         <div className='w-full px-4 py-6'>
-                                    <div className='flex items-center justify-center w-full max-w-md sm:p-6 mx-auto'>
+                            <div className='flex items-center justify-center w-full max-w-md sm:p-6 mx-auto'>
                                     <div className='bg-gray-200 p-5 sm:p-6 rounded-lg w-full max-w-md shadow-md mx-auto'>
                                         <h2 className='text-2xl font-bold mb-4 border-b pb-2 text-gray-800'>Occasional report</h2>
                                         <div className='flex justify-between'>
@@ -310,11 +349,24 @@ const ReportPage=()=>{
                                             <span>₹{occasionalData.totalOccasional || 0}</span>
                                         </div>
                                     </div>
-                                </div>
-                                </div>
+                            </div>
+                             <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mt-5 ml-5 mb-6" 
+                                        onClick={()=>{setShowForm(true)}}>
+                                    Back
+                            </button>
+                        </div>
                     ) }
                     {currentTab==='occasional' && !showForm && (!occasionalData || Object.keys(occasionalData).length===0) &&
-                                    (<div className='bg-red-100 text-red-700 p-4 rounded shadow max-w-md mx-auto'>No data for this year</div>)}
+                                    (
+                                    <>
+                                        <div className='bg-red-100 text-red-700 p-4 rounded shadow max-w-md mx-auto'>No data for this year</div>
+                                         <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mt-5 ml-5 mb-6" 
+                                                onClick={()=>{setShowForm(true)}}>
+                                            Back
+                                        </button>
+                                    </>
+                                    
+                                    )}
 
                     {currentTab==="compare" && showForm && (
                         <div className='w-full px-4 py-6'>
@@ -378,6 +430,10 @@ const ReportPage=()=>{
                                     >Fetch report</button>
                                 </form>
                             </div>
+                            <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mt-5 ml-5 mb-6" 
+                                        onClick={()=>{navigate('/home')}}>
+                                    Back
+                            </button>
                         </div>
                         )
                     }
@@ -435,6 +491,10 @@ const ReportPage=()=>{
                                         </div>
                                     </div>
                                 </div>
+                                <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mt-5 ml-5 mb-6" 
+                                        onClick={()=>{setShowForm(true)}}>
+                                    Back
+                                </button>
                         </div>
                     )}
             

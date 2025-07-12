@@ -1,7 +1,9 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 const AddExpense = () =>{
+    const navigate=useNavigate();
     const[currentTab, setCurrentTab]=useState('daily');
     const[submitMsg, setSubmitMsg]=useState('');
     //all
@@ -443,7 +445,11 @@ const AddExpense = () =>{
                                 {submitMsg && (<p className="text-green-700 text-sm font-bold mt-3 mb-3">{submitMsg}</p>)}
                             </div>
                         }
-                </div>  
+                </div>
+                <button className="bg-blue-500 mt-5 ml-5 mb-6 text-white px-4 py-2 rounded hover:bg-blue-700" 
+                        onClick={()=>{navigate('/home')}}>
+                    Back
+                </button>  
             </div>
         </>
         

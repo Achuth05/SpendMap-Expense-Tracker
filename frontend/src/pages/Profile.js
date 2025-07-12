@@ -1,9 +1,10 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import {Link} from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate} from 'react-router-dom';
 import Navbar from "../components/Navbar";
 const Profile=()=>{
+    const navigate=useNavigate();
     const location=useLocation();
     const[user, setUser]=useState(null);
     const[successMsg,setSuccessMsg]=useState('');
@@ -84,6 +85,10 @@ const Profile=()=>{
                     </div>
                 </div>
             </div>
+            <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mt-5 ml-5 mb-6" 
+                    onClick={()=>{navigate('/home')}}>
+                Back
+            </button>
         </div>
             
     )

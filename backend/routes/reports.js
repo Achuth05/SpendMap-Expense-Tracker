@@ -209,7 +209,7 @@ router.get('/compare/:id/:month1/:year1/:month2/:year2', auth, async(req,res)=>{
     }
 });
 
-router.get('/summary:id', auth, async(req,res)=>{
+router.get('/summary/:id', auth, async(req,res)=>{
     const getMonthName=(monthNo)=>{
         const months=['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September','October', 'November', 'December'];
         return months[monthNo];
@@ -219,6 +219,7 @@ router.get('/summary:id', auth, async(req,res)=>{
         const currDate=new Date();
         const currMonth=currDate.getMonth();
         const currYear=currDate.getFullYear();
+        const monthName=getMonthName(currMonth);
         const [dailySum, monthlySum, occasionalSum]= await Promise.all([
             daily.aggregate([
                 {
@@ -241,7 +242,7 @@ router.get('/summary:id', auth, async(req,res)=>{
                     $match:{
                         userId:new mongoose.Types.ObjectId(id),
                         month:getMonthName(currMonth),
-                        year:currYear.toString()
+                        year:currYear
                     }
                 },
                 {
@@ -266,6 +267,7 @@ router.get('/summary:id', auth, async(req,res)=>{
             ])
         ]);
         res.json({
+            month:monthName,
             dailySum:dailySum[0]?.total || 0,
             monthlySum:monthlySum[0]?.total || 0,
             occasionalSum:occasionalSum[0]?.total || 0,

@@ -47,18 +47,36 @@ const HomePage=()=>{
                 <p className='max-w-xl text-md text-center italic mb-6'>Tracking expenses with ease</p>
                 <p className='text-md text-gray-600 mb-5 text-center'>From adding expenses to reviewing your reports. Your journey begins here.</p>
             </div>
-            <div className='flex justify-center items-center'>
+            <div className='flex justify-center px-4 items-center'>
                 {summary && Object.keys(summary).length>0?(
-                    <div className='bg-white mt-10 p-6 mb-8 rounded-lg max-w-md shadow-md'>
+                    <div className='bg-white mt-10 p-6 px-4 w-full flex flex-col items-center justify-center mx-auto mb-8 rounded-lg max-w-md shadow-md'>
                         <h2 className='text-gray-800 text-xl font-bold mb-4'>This month's SUMMARY</h2>
-                        <div className='flex justify-between'>
-                            <span className='text-green-800'>Daily expenses: </span><span className='text-blue-700'>₹{summary.dailySum}</span>
-                            <span className='text-green-800'>Monthly bills: </span><span className='text-blue-700'>₹{summary.monthlySum}</span>
-                            <span className='text-green-800'>Occasional: </span><span className='text-blue-700'>₹{summary.occasionalSum}</span>
+                        <div className='bg-white w-full items-center justify-center max-w-md flex'>
+                            <div className='flex flex-col p-3 bg-gray-200 rounded-md items-center justify-center w-20 mr-6 shadow-lg'>
+                                {summary.month.slice(0,3).toUpperCase().split('').map((char, index)=>(
+                                    <span key={index} className='text-gray-800 font-extrabold text-3xl'>{char}</span>
+                                ))}
+                            </div>
+                            <div className='flex flex-col py-2 px-4 bg-green-100 rounded-md shadow-lg'>
+                                <div className='flex justify-between'>
+                                    <span className='text-green-800 mr-1'>Daily expenses: </span>
+                                    <span className='text-blue-700'>₹{summary.dailySum}</span>
+                                </div>
+                                <div className='flex justify-between'>
+                                    <span className='text-green-800 mr-1'>Monthly bills: </span>
+                                    <span className='text-blue-700'>₹{summary.monthlySum}</span>
+                                </div>
+                                <div className='flex justify-between'>
+                                    <span className='text-green-800 mr-1'>Occasional: </span>
+                                    <span className='text-blue-700'>₹{summary.occasionalSum}</span>
+                                </div>
+                                <div className='flex justify-between font-semibold border-t rounded-md py-1 px-3 bg-white shadow-md pt-2 mt-1'>
+                                    <span className='text-blue-800 mr-1'>Total: </span>
+                                    <span className='text-blue-800'>₹{summary.total}</span>
+                                </div>
+                            </div>
                         </div>
-                        <div className='flex justify-between font-semibold border-t shadow-md pt-2 mt-2'>
-                            <span className='text-blue-800'>Total: </span><span className='text-blue-800'>₹{summary.total}</span>
-                        </div>
+                        
                     </div>
                 ):(
                     <div className='bg-white mt-10 p-6 mb-8 rounded-lg max-w-md shadow-md'>
@@ -69,7 +87,7 @@ const HomePage=()=>{
             </div>
             
             
-            <div className='flex mx-auto flex-col pb-6 md:flex-row items-center justify-center gap-8 mt-10 '>
+            <div className='flex mx-auto flex-col pb-10 md:flex-row items-center justify-center gap-8 mt-10 '>
                  
                     <Link to='/add'>
                         <div className='bg-white rounded-xl w-60 h-50 shadow-md hover:shadow-xl transform hover:scale-105 transition-all duration-300 p-6 flex flex-col items-center cursor-pointer'>

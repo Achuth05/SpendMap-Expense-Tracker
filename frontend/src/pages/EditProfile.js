@@ -63,6 +63,10 @@ const Edit=()=>{
                     </form>
                 </div>
             </div>
+            <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mt-5 ml-5 mb-6" 
+                    onClick={()=>{navigate('/profile')}}>
+                Back
+            </button>
         </div>
     )
 };
