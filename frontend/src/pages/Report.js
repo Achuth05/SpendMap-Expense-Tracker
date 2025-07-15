@@ -1,11 +1,16 @@
 import React from 'react';
 import {jwtDecode} from 'jwt-decode';
+import { Bar } from 'react-chartjs-2';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import {Chart, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend} from 'chart.js';
+Chart.register(CategoryScale, LinearScale, BarElement, Tooltip, Title, Legend);
+
 const ReportPage=()=>{
     const navigate=useNavigate();
     const[weeklyData, setWeeklyData]=useState(null);
+    const[chartData, setChartData]=useState(null);
     const[monthlyData, setMonthlyData]=useState(null);
     const[occasionalData, setOccasionalData]=useState(null);
     const[compareData, setCompareData]=useState(null);
@@ -34,6 +39,19 @@ const ReportPage=()=>{
             );
             const data=await res.json();
             console.log("Response:", data);
+            const fields=['Food', 'Travel', 'Entertainment', 'Shopping', 'Others'];
+            const values=fields.map(field=>(data.data[`total${field}`]||0));
+            const max=Math.max(...values);
+            const backgroundColors=values.map(val=>val===max?'rgba(255, 99, 132, 0.8)':'rgba(54, 162, 235, 0.7)');
+            setChartData({
+                labels:fields,
+                datasets:[{
+                    label:"Weekly Expense Report",
+                    data:values,
+                    backgroundColor:backgroundColors,
+                }],
+            });
+            console.log( "Chart data", chartData);
             setWeeklyData(data.data);
             setShowForm(false);
         }
@@ -56,6 +74,18 @@ const ReportPage=()=>{
             );
             const data= await res.json();
             console.log("Response:", data);
+            const fields=['Electricity', 'Water', 'Rent', 'Others'];
+            const values=fields.map(field=>data.data[`total${field}`]||0);
+            const max=Math.max(...values);
+            const backgroundColors=values.map(val=>val===max?'rgba(255, 99, 132, 0.8)':'rgba(60, 179, 160, 0.7)')
+            setChartData({
+                labels:fields,
+                datasets:[{
+                    label:"Monthly Expense Report",
+                    data:values,
+                    backgroundColor:backgroundColors,
+                }],
+            });
             setMonthlyData(data.data);
             setShowForm(false);
         }
@@ -78,6 +108,18 @@ const ReportPage=()=>{
             );
             const data=await res.json();
             console.log("Response:", data);
+            const fields=['Insurance', 'SchoolFee', 'Repair'];
+            const values=fields.map(field=>data.data[`total${field}`]||0);
+            const max=Math.max(...values);
+            const backgroundColors=values.map(val=>val===max?'rgba(255, 99, 132, 0.8)':'rgba(255, 206, 86, 0.8)');
+            setChartData({
+                labels:fields,
+                datasets:[{
+                    label:"Occasional Expense Report",
+                    data:values,
+                    backgroundColor:backgroundColors,
+                }],
+            });
             setOccasionalData(data.data);
             setShowForm(false);
         }
@@ -195,6 +237,21 @@ const ReportPage=()=>{
                                             </div>
                                         </div>
                                     </div>
+                                    <div className='flex justify-center px-4 py-4'>
+                                        <div className='w-full max-w-3xl md:h-[400px] bg-gray-200 rounded shadow-md'>
+                                            <Bar data={chartData} options={{
+                                                responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}, tooltip:{enabled:true}}, scales:{
+                                                    y:{
+                                                        beginAtZero:true, ticks:{
+                                                            precision:0,
+                                                            stepSize:100,
+                                                        }
+                                                    }
+                                                } }} height={300}/>
+                                        </div>
+                                    </div>
+                                    
+                                   
                                     <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mt-5 ml-5 mb-6" 
                                         onClick={()=>{setShowForm(true)}}>
                                         Back
@@ -280,6 +337,19 @@ const ReportPage=()=>{
                                         </div>
                                     </div>
                                 </div>
+                                <div className='flex justify-center px-4 py-4'>
+                                        <div className='w-full max-w-3xl px-2 py-2 md:h-[400px] bg-gray-200 rounded shadow-md'>
+                                            <Bar data={chartData} options={{
+                                                responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}, tooltip:{enabled:true}}, scales:{
+                                                    y:{
+                                                        beginAtZero:true, ticks:{
+                                                            precision:0,
+                                                            stepSize:100,
+                                                        }
+                                                    }
+                                                } }} height={300}/>
+                                        </div>
+                                </div>
                                 <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mt-5 ml-5 mb-6" 
                                                 onClick={()=>{setShowForm(true)}}>
                                             Back
@@ -350,6 +420,19 @@ const ReportPage=()=>{
                                         </div>
                                     </div>
                             </div>
+                            <div className='flex justify-center px-4 py-4'>
+                                    <div className='w-full max-w-3xl px-2 py-2 md:h-[400px] bg-gray-200 rounded shadow-md'>
+                                        <Bar data={chartData} options={{
+                                            responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}, tooltip:{enabled:true}}, scales:{
+                                                y:{
+                                                    beginAtZero:true, ticks:{
+                                                        precision:0,
+                                                        stepSize:100,
+                                                    }
+                                                }
+                                            } }} height={300}/>
+                                    </div>
+                                </div>
                              <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mt-5 ml-5 mb-6" 
                                         onClick={()=>{setShowForm(true)}}>
                                     Back
