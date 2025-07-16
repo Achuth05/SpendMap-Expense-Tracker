@@ -45,11 +45,13 @@ const ReportPage=()=>{
             const backgroundColors=values.map(val=>val===max?'rgba(255, 99, 132, 0.8)':'rgba(54, 162, 235, 0.7)');
             setChartData({
                 labels:fields,
-                datasets:[{
-                    label:"Weekly Expense Report",
-                    data:values,
-                    backgroundColor:backgroundColors,
-                }],
+                datasets:[
+                    {
+                        label:"Weekly expense report",
+                        data:values,
+                        backgroundColor:backgroundColors,
+                    },  
+                ],
             });
             console.log( "Chart data", chartData);
             setWeeklyData(data.data);
@@ -142,6 +144,27 @@ const ReportPage=()=>{
             );
             const data=await res.json();
             console.log("Response:", data);
+            const fields=['Electricity', 'Water', 'Rent', 'Others'];
+            const labels=fields;
+            const mlabel1=`${month1}, ${year1}`;
+            const mlabel2=`${month2}, ${year2}`;
+            const month1Values=fields.map(field=>data.individual[`total${field}`]?.[mlabel1]||0);
+            const month2Values=fields.map(field=>data.individual[`total${field}`]?.[mlabel2]||0);
+            setChartData({
+                labels,
+                datasets:[
+                    {
+                        label:mlabel1,
+                        data:month1Values,
+                        backgroundColor:'rgba(54, 162, 235, 0.7)',
+                    },
+                    {
+                        label:mlabel2,
+                        data:month2Values,
+                        backgroundColor:'rgba(255, 206, 86, 0.7)',
+                    },
+                ]
+            });
             setCompareData(data);
             setShowForm(false);
         }
@@ -572,6 +595,19 @@ const ReportPage=()=>{
                                                 </div>
                                             ))}
                                         </div>
+                                    </div>
+                                </div>
+                                <div className='flex justify-center px-4 py-4'>
+                                    <div className='w-full max-w-3xl px-2 py-2 md:h-[400px] bg-gray-200 rounded shadow-md'>
+                                        <Bar data={chartData} options={{
+                                            responsive:true, maintainAspectRatio:false, plugins:{legend:{display:true}, tooltip:{enabled:true}}, scales:{
+                                                y:{
+                                                    beginAtZero:true, ticks:{
+                                                        precision:0,
+                                                        stepSize:100,
+                                                    }
+                                                }
+                                            } }} height={300}/>
                                     </div>
                                 </div>
                                 <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mt-5 ml-5 mb-6" 

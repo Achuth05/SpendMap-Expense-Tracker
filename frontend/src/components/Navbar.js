@@ -2,7 +2,9 @@ import React from 'react';
 import {useState} from 'react';
 import {Link} from 'react-router-dom';
 import { useNavigate} from 'react-router-dom';
+/*import {useTheme} from '../context/ThemeContext';*/
 const Navbar=()=>{
+
     const navigate=useNavigate();
     const[dropDown, setDropDown]=useState(false);
     const[hamburger, setHamburger]=useState(false);
@@ -27,9 +29,10 @@ const Navbar=()=>{
         
         {/* Right side - Profile icon */}
         <div className="flex-shrink-0 relative">
-          <button onClick={() => setDropDown(!dropDown)} className="text-xl">
+          <button onClick={() => setDropDown(!dropDown)} className="text-xl mr-2">
             👤
           </button>
+          {/*<button onClick={()=>setDarkMode(!darkMode)} className='bg-gray-800 text-white px-2 py-2 rounded hover:bg-gray-600 dark:bg-white dark:text-black dark:hover:bg-gray-600 transition'>{darkMode? 'Light Mode':'Dark Mode'}</button>*/}
           {dropDown && (
             <div className="absolute right-0 mt-2 w-40 bg-white rounded shadow-lg z-50">
               <Link to="/profile" className="block px-4 py-2 hover:bg-gray-100 text-sm">Profile</Link>
