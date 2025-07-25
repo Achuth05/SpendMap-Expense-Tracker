@@ -2,6 +2,8 @@ const express=require('express');
 const router=express.Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const crypto=require('crypto');
+const nodemailer=require('nodemailer');
 const User=require('../models/User');
 const auth=require('../middleware/auth');
 router.post('/register',async (req,res)=>{
@@ -103,5 +105,38 @@ router.put('/edit-profile', auth, async(req,res)=>{
         res.status(500).json({msg:"Failed to update"});
         console.error("Failed to update profile", err);
     }
+});
+
+router.post('/forgot-password', async(req, res)=>{
+    const {email}=req.body;
+    const user=await User.findOne({email});
+    if(!user){
+        return res.status(400).json({msg:"User not found"});
+    }
+    const token=crypto.randomBytes(32).toString('hex');
+    user.resetToken=token;
+    user.resetTokenExpiry=Date.now()+3600000;
+    await user.save();
+    const resetLink=`https://localhost:3000/reset-password/${token}`;
+    const transporter=nodemailer.createTransport({
+        service:'gmail',
+        auth:{
+            user:process.env.SM_EMAIL,
+            pass:process.env.SM_PWD,
+        }
+    });
+    const opt={
+        from:'SpendMap Support',
+        to:user.email,
+        sub:"Password reset",
+        html:`<p>Click <a href="${resetLink}"> here to reset your password. This link is valid for 1 hour.</p>`,
+    };
+    transporter.sendMail(opt, (err)=>{
+        if(err){
+            console.log(err);
+            return res.status(400).json({msg:"Email not sent"});
+        }
+        res.status(200).json({msg:"Mail sent"});
+    });
 });
 module.exports=router;

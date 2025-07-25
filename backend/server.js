@@ -9,7 +9,8 @@ app.use(cors({
     origin: "http://localhost:3000",
     credentials: true
 }));
-
+const scheduleRemainder=require('./reminders/scheduleReminder');
+scheduleRemainder();
 const auth = require('./routes/auth');
 const exp = require('./routes/expenses');
 const reports = require('./routes/reports');

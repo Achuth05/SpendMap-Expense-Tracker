@@ -74,12 +74,16 @@ const LoginPage = () => {
               placeholder="Enter your password"
             />
           </div>
-          <button
-            type="submit"
-            className="w-full bg-gray-600 text-white py-2 rounded hover:bg-gray-900 transition"
-          >
-            Login
-          </button>
+          <div className='mb-2 flex'>
+              <button
+                type="submit"
+                className="w-full bg-gray-600 text-white py-2 rounded hover:bg-gray-900 transition"
+                  >
+                Login
+              </button>
+             
+                
+          </div>
           {error && <p className='text-red-500 mt-4 text-sm'>{error}</p>}
         </form>
 
