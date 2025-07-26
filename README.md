@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# SpendMap
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+SpendMap is a personal expense tracker website that helps users manage their dailu, monthly and occasional expenses. It provides visual reports and comparison charts to gain insights and control of the expenses.
 
 ## Available Scripts
 
