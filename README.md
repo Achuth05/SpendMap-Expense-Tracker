@@ -9,10 +9,10 @@ SpendMap is a personal expense tracker website that helps users manage their dai
  - Reminder system
 
 ## Tech Stack
- ***Frontend:*** React, React Router, Tailwind CSS
- ***Backend:*** Node.js, Express.js
- ***Database:*** MongoDB
- ***Authentication:*** JWT
+ - ***Frontend:*** React, React Router, Tailwind CSS
+ - ***Backend:*** Node.js, Express.js
+ - ***Database:*** MongoDB
+ - ***Authentication:*** JWT
 
 
 
