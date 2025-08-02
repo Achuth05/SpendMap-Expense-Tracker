@@ -147,7 +147,7 @@ const AddExpense = () =>{
     
     return(
         <>
-            <div className="bg-gray-400  min-h-screen">
+            <div className="pt-16 bg-gray-400  min-h-screen">
                 <Navbar/>
                 <h1 className="text-gray-800 text-3xl sm:4xl md:text-5xl font-bold mb-6 px-4 py-4 ">Add EXPENSE</h1>
                 <div className="flex justify-center space-x-4 mb-6">

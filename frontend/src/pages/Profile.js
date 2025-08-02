@@ -54,7 +54,7 @@ const Profile=()=>{
         day:'numeric'
     });
     return (
-        <div className='bg-gray-400 min-h-screen'>
+        <div className='pt-16 bg-gray-400 min-h-screen'>
             <Navbar/>
             <h1 className='text-gray-800 text-3xl sm:text-4xl md:text-5xl px-4 font-bold py-4'>Your PROFILE</h1>
             <div className=' flex flex-col items-center justify-center w-full px-4 py-6'>

@@ -13,7 +13,7 @@ const Navbar=()=>{
         navigate('/login');
     }
     return (
-    <nav className="bg-gray-300 shadow-md px-4 py-3">
+    <nav className="fixed top-0 w-full bg-gray-300 shadow-md px-4 py-3">
       <div className="max-w-7xl flex items-center justify-between">
         <div className=" items-center flex space-x-4">
             {/* Hamburger for mobile */}

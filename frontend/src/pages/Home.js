@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-/*import add from '../assets/add.png';
-import view from '../assets/view.png';*/
+import add from '../assets/add.png';
+import report from '../assets/report.png';
 import {jwtDecode} from 'jwt-decode';
 import { useLocation, Link } from 'react-router-dom';
 import Navbar from '../components/Navbar'
@@ -36,7 +36,7 @@ const HomePage=()=>{
         fetchSummary();
     },[]);
     return (
-        <div className='min-h-screen bg-gray-400'>
+        <div className='pt-16 min-h-screen bg-gray-400'>
             <Navbar/>
             {welcomeMsg && (
                 <div className='text-3xl mt-4 ml-4 sm:text-4xl md:text-5xl text-gray-800 font-bold'>{welcomeMsg}</div>
@@ -87,18 +87,16 @@ const HomePage=()=>{
             </div>
             
             
-            <div className='flex mx-auto flex-col pb-10 md:flex-row items-center justify-center gap-8 mt-10 '>
+            <div className='flex mx-auto pb-10 md:flex-row items-center justify-center gap-8 mt-10 '>
                  
                     <Link to='/add'>
-                        <div className='bg-white rounded-xl w-60 h-50 shadow-md hover:shadow-xl transform hover:scale-105 transition-all duration-300 p-6 flex flex-col items-center cursor-pointer'>
-                            <img src='/images/add.png' className='w-20 h-20 object-contain mb-4' alt='Add'/>
-                            <span className='text-lg font-bold text-gray-800'>Add Expense</span>
+                        <div className='bg-yellow-200 rounded-xl w-32 h-32 shadow-md hover:shadow-xl transform hover:scale-105 transition-all duration-300 p-6 flex items-center justify-center cursor-pointer'>
+                            <span className='text-3xl font-extrabold text-gray-800 tracking-wider'>ADD</span>
                         </div>
                     </Link>
                     <Link to='/report'>
-                        <div className='bg-white rounded-xl w-60 h-50 shadow-md hover:shadow-xl transform hover:scale-105 transition-all duration-300 p-6 flex flex-col items-center cursor-pointer'>
-                            <img src='/images/view.png' className='w-20 h-20 object-contain mb-4' alt='Add'/>
-                            <span className='text-lg font-bold text-gray-800'>View Reports</span>
+                        <div className='bg-yellow-200 rounded-xl w-32 h-32 shadow-md hover:shadow-xl transform hover:scale-105 transition-all duration-300 p-6 flex items-center justify-center cursor-pointer'>
+                            <span className='text-3xl font-extrabold text-gray-800 tracking-wider'>VIEW</span>
                         </div>
                     </Link>
                 
