@@ -10,9 +10,6 @@ const AboutPage=()=>{
                 {[
                     ["Track your spendings easily", "Add and manage your daily, monthly and occasional expenses."],
                     ["Visual reports", "View weekly trends, monthly comparisons and category-wise breakdowns."],
-                    ["Conclusions", "Find what caused an increase in expense."],
-                    ["Export", "Download your reports as PDF."],
-                    ["Remainders", "Get notifications for due expenses."],
                     ["Safe & Secure", "Your data is private and secure."]
                 ].map(([title, desc], i)=>{
                     return(
