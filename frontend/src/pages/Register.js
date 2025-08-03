@@ -73,7 +73,8 @@ const RegisterPage=()=>{
                         Create account
                     </button>
                     {error && <p className='text-red-500 mt-4 text-sm'>{error}</p>}
-                     <p><Link to='/' className='mt-2 block text-sm text-blue-600 text-center hover:underline'>Back to login</Link></p>
+                     <p><Link to='/login' className='mt-2 block text-sm text-blue-600 text-center hover:underline'>Back to login</Link></p>
+
                     </form>
                 </div>
             </div>
