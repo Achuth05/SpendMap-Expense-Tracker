@@ -29,7 +29,7 @@ const AddExpense = () =>{
             others: Number(others)||0, notes
         };
         try{
-            const res= await fetch('http://localhost:3001/api/expenses/daily',
+            const res= await fetch('https://spendmap-server.onrender.com/api/expenses/daily',
                 {
                     method:'POST',
                     headers:{'Content-Type':'application/json',
@@ -75,7 +75,7 @@ const AddExpense = () =>{
             others: Number(others)||0, notes
         };
         try{
-            const res= await fetch('http://localhost:3001/api/expenses/monthly',
+            const res= await fetch('https://spendmap-server.onrender.com/api/expenses/monthly',
                 {
                     method:'POST',
                     headers:{'Content-Type':'application/json',
@@ -119,7 +119,7 @@ const AddExpense = () =>{
             date, insurance: Number(insurance)||0, schoolFee: Number(schoolFee)||0, repair: Number(repair)||0, notes
         };
         try{
-            const res= await fetch('http://localhost:3001/api/expenses/occasional',
+            const res= await fetch('https://spendmap-server.onrender.com/expenses/occasional',
                 {
                     method:'POST',
                     headers:{'Content-Type':'application/json',

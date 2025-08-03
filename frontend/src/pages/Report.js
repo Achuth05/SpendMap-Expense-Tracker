@@ -39,7 +39,7 @@ const ReportPage=()=>{
         const userId=decoded.user.id;
         console.log("fetching for", startDate, endDate);
         try{
-            const res = await fetch(`http://localhost:3001/api/reports/weekly/${userId}?startDate=${startDate}&endDate=${endDate}`,
+            const res = await fetch(`https://spendmap-server.onrender.com/api/reports/weekly/${userId}?startDate=${startDate}&endDate=${endDate}`,
                 {
                     headers:{'Content-Type':'application/json', Authorization:`Bearer ${token}`},
                 }
@@ -80,7 +80,7 @@ const ReportPage=()=>{
         const userId=decoded.user.id;
         console.log("fetching for", month, year);
         try{
-            const res= await fetch(`http://localhost:3001/api/reports/monthly/${userId}/${month}/${year}`,
+            const res= await fetch(`https://spendmap-server.onrender.com/api/reports/monthly/${userId}/${month}/${year}`,
                 {
                     headers:{'Content-Type':'application/json', Authorization:`Bearer ${token}`},
                 }
@@ -118,7 +118,7 @@ const ReportPage=()=>{
         const userId=decoded.user.id;
         console.log("Fetching for", year);
         try{
-            const res= await fetch(`http://localhost:3001/api/reports/occasional/${userId}/${year}`,
+            const res= await fetch(`https://spendmap-server.onrender.com/api/reports/occasional/${userId}/${year}`,
                 {
                     headers:{'Content-Type':'application/json', Authorization:`Bearer ${token}`},
                 }
@@ -156,7 +156,7 @@ const ReportPage=()=>{
         const userId=decoded.user.id;
         console.log("Fetching for:", month1, year1, month2, year2);
         try{
-            const res=await fetch(`http://localhost:3001/api/reports/compare/${userId}/${month1}/${year1}/${month2}/${year2}`,
+            const res=await fetch(`https://spendmap-server.onrender.com/api/reports/compare/${userId}/${month1}/${year1}/${month2}/${year2}`,
                 {
                     headers:{'Content-Type':'application/json', Authorization:`Bearer ${token}`}
                 }

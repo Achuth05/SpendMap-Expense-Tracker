@@ -30,7 +30,7 @@ const Profile=()=>{
         const fetchProfile=async()=>{
             const token=localStorage.getItem('token');
             try{
-                const res= await fetch('http://localhost:3001/api/auth/profile', {
+                const res= await fetch('https://spendmap-server.onrender.com/api/auth/profile', {
                 headers:{
                     'Content-Type':'application/json',
                      Authorization:`Bearer ${token}`,

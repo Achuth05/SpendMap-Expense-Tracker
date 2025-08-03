@@ -10,7 +10,7 @@ const RegisterPage=()=>{
     const handleRegister=async(e)=>{
         e.preventDefault();
         try{
-            const res=await fetch('http://localhost:3001/api/auth/register',
+            const res=await fetch('https://spendmap-server.onrender.com/api/auth/register',
                 {
                     method: 'POST',
                     headers:{'Content-Type':'application/json',},
@@ -21,7 +21,7 @@ const RegisterPage=()=>{
             if(res.ok){
                 console.log("Succesfully registered");
                 localStorage.setItem('token', data.token);
-                navigate('/',{state:{registered:true}});
+                navigate('/login',{state:{registered:true}});
             }
             else{
                 setError(data.msg||"Failed to create account");

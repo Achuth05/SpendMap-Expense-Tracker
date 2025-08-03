@@ -15,7 +15,7 @@ const Change=()=>{
         }
         const token=localStorage.getItem('token');
         try{
-            const res=await fetch('http://localhost:3001/api/auth/change-password',
+            const res=await fetch('https://spendmap-server.onrender.com/api/auth/change-password',
                 {
                     method:'POST',
                     headers:{'Content-Type':'application/json', Authorization:`Bearer ${token}`},

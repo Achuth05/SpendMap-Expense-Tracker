@@ -21,7 +21,7 @@ const HomePage=()=>{
         const userId=decoded.user.id;
         const fetchSummary=async()=>{
             try{
-                const res=await fetch(`http://localhost:3001/api/reports/summary/${userId}`,
+                const res=await fetch(`https://spendmap-server.onrender.com/api/reports/summary/${userId}`,
                     {
                         headers:{'Content-Type':'application/json', Authorization:`Bearer ${token}`}
                     }

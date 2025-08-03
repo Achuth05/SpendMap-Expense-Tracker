@@ -10,7 +10,7 @@ const Edit=()=>{
         e.preventDefault();
         const token=localStorage.getItem('token');
         try{
-            const res=await fetch('http://localhost:3001/api/auth/edit-profile',
+            const res=await fetch('https://spendmap-server.onrender.com/api/auth/edit-profile',
                 {
                     method:'PUT',
                     headers:{'Content-Type':'application/json', Authorization:`Bearer ${token}`},
